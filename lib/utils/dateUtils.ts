@@ -1,6 +1,5 @@
-// Date and time utility functions
-import { differenceInDays, formatDistanceToNow, isThisWeek, isToday, isYesterday } from 'date-fns';
-import type { ExpectedFrequency } from '@/types';
+import { formatDistanceToNow, isAfter, addDays, addWeeks, addMonths, addYears } from 'date-fns';
+import type { Task, ExpectedFrequency } from '@/types';
 
 /**
  * Format time elapsed since a date in human-readable format
@@ -10,180 +9,182 @@ export function formatTimeElapsed(date: Date | null): string {
     return 'Not done yet';
   }
 
-  const now = new Date();
-
-  // Handle very recent completions
-  const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-  if (diffInMinutes < 60) {
-    return 'Just now';
-  }
-
-  // Use date-fns for human-readable formatting
   try {
     return formatDistanceToNow(date, { addSuffix: true });
   } catch (error) {
+    // Error logged for debugging purposes
     // eslint-disable-next-line no-console
-    console.error('Error formatting date:', error);
+    console.error('Error formatting time elapsed:', error);
     return 'Unknown';
   }
 }
 
 /**
- * Get a more detailed time elapsed description
+ * Calculate the next due date based on last completion and expected frequency
  */
-export function getTimeElapsedCategory(
-  date: Date | null
-): 'just-now' | 'today' | 'yesterday' | 'this-week' | 'older' | 'never' {
-  if (!date) {
-    return 'never';
-  }
-
-  const now = new Date();
-  const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-
-  if (diffInMinutes < 60) {
-    return 'just-now';
-  }
-
-  if (isToday(date)) {
-    return 'today';
-  }
-
-  if (isYesterday(date)) {
-    return 'yesterday';
-  }
-
-  if (isThisWeek(date)) {
-    return 'this-week';
-  }
-
-  return 'older';
-}
-
-/**
- * Calculate if a task is overdue based on expected frequency
- */
-export function isTaskOverdue(
+export function calculateNextDueDate(
   lastCompletedAt: Date | null,
-  expectedFrequency?: ExpectedFrequency
-): boolean {
-  if (!expectedFrequency || !lastCompletedAt) {
-    return false;
-  }
-
-  const now = new Date();
-  const daysSinceCompletion = differenceInDays(now, lastCompletedAt);
-
-  // Convert expected frequency to days
-  let expectedDays: number;
-  switch (expectedFrequency.unit) {
-    case 'day':
-      expectedDays = expectedFrequency.value;
-      break;
-    case 'week':
-      expectedDays = expectedFrequency.value * 7;
-      break;
-    case 'month':
-      expectedDays = expectedFrequency.value * 30; // Approximate
-      break;
-    case 'year':
-      expectedDays = expectedFrequency.value * 365; // Approximate
-      break;
-    default:
-      return false;
-  }
-
-  return daysSinceCompletion > expectedDays;
-}
-
-/**
- * Calculate days until a task becomes overdue
- */
-export function getDaysUntilOverdue(
-  lastCompletedAt: Date | null,
-  expectedFrequency?: ExpectedFrequency
-): number | null {
-  if (!expectedFrequency || !lastCompletedAt) {
+  expectedFrequency: ExpectedFrequency | undefined
+): Date | null {
+  if (!lastCompletedAt || !expectedFrequency) {
     return null;
   }
 
-  const now = new Date();
-  const daysSinceCompletion = differenceInDays(now, lastCompletedAt);
-
-  // Convert expected frequency to days
-  let expectedDays: number;
-  switch (expectedFrequency.unit) {
-    case 'day':
-      expectedDays = expectedFrequency.value;
-      break;
-    case 'week':
-      expectedDays = expectedFrequency.value * 7;
-      break;
-    case 'month':
-      expectedDays = expectedFrequency.value * 30;
-      break;
-    case 'year':
-      expectedDays = expectedFrequency.value * 365;
-      break;
-    default:
-      return null;
+  const { value, unit } = expectedFrequency;
+  
+  try {
+    switch (unit) {
+      case 'day':
+        return addDays(lastCompletedAt, value);
+      case 'week':
+        return addWeeks(lastCompletedAt, value);
+      case 'month':
+        return addMonths(lastCompletedAt, value);
+      case 'year':
+        return addYears(lastCompletedAt, value);
+      default:
+        return null;
+    }
+  } catch (error) {
+    // Error logged for debugging purposes
+    // eslint-disable-next-line no-console
+    console.error('Error calculating next due date:', error);
+    return null;
   }
-
-  return expectedDays - daysSinceCompletion;
 }
 
 /**
- * Format expected frequency for display
+ * Check if a task is overdue based on expected frequency
  */
-export function formatExpectedFrequency(frequency: ExpectedFrequency): string {
-  const { value, unit } = frequency;
+export function isTaskOverdue(task: Task, currentDate: Date = new Date()): boolean {
+  if (!task.expectedFrequency || !task.lastCompletedAt) {
+    return false;
+  }
 
-  if (value === 1) {
-    switch (unit) {
-      case 'day':
-        return 'Daily';
-      case 'week':
-        return 'Weekly';
-      case 'month':
-        return 'Monthly';
-      case 'year':
-        return 'Yearly';
+  const nextDueDate = calculateNextDueDate(task.lastCompletedAt, task.expectedFrequency);
+  
+  if (!nextDueDate) {
+    return false;
+  }
+
+  return isAfter(currentDate, nextDueDate);
+}
+
+/**
+ * Get overdue status with additional information
+ */
+export function getOverdueStatus(task: Task, currentDate: Date = new Date()) {
+  const isOverdue = isTaskOverdue(task, currentDate);
+  const nextDueDate = calculateNextDueDate(task.lastCompletedAt, task.expectedFrequency);
+  
+  let overdueBy: string | null = null;
+  
+  if (isOverdue && nextDueDate) {
+    try {
+      overdueBy = formatDistanceToNow(nextDueDate, { addSuffix: false });
+    } catch (error) {
+      // Error logged for debugging purposes
+      // eslint-disable-next-line no-console
+      console.error('Error calculating overdue duration:', error);
     }
   }
 
-  const unitLabel =
-    unit === 'day' ? 'days' : unit === 'week' ? 'weeks' : unit === 'month' ? 'months' : 'years';
+  return {
+    isOverdue,
+    nextDueDate,
+    overdueBy,
+    lastCompleted: task.lastCompletedAt ? formatTimeElapsed(task.lastCompletedAt) : null,
+  };
+}
+
+/**
+ * Get time until next due date
+ */
+export function getTimeUntilDue(task: Task, currentDate: Date = new Date()): string | null {
+  const nextDueDate = calculateNextDueDate(task.lastCompletedAt, task.expectedFrequency);
+  
+  if (!nextDueDate) {
+    return null;
+  }
+
+  if (isAfter(currentDate, nextDueDate)) {
+    return null; // Already overdue
+  }
+
+  try {
+    return formatDistanceToNow(nextDueDate, { addSuffix: true });
+  } catch (error) {
+    // Error logged for debugging purposes
+    // eslint-disable-next-line no-console
+    console.error('Error calculating time until due:', error);
+    return null;
+  }
+}
+
+/**
+ * Format expected frequency in human-readable format
+ */
+export function formatExpectedFrequency(frequency: ExpectedFrequency): string {
+  const { value, unit } = frequency;
+  
+  let unitLabel: string;
+  if (value === 1) {
+    unitLabel = unit;
+  } else {
+    unitLabel = `${unit}s`;
+  }
 
   return `Every ${value} ${unitLabel}`;
 }
 
 /**
- * Get the next expected completion date
+ * Get completion streak for a task (how many times completed in expected frequency periods)
  */
-export function getNextExpectedDate(
-  lastCompletedAt: Date | null,
-  expectedFrequency?: ExpectedFrequency
-): Date | null {
-  if (!expectedFrequency || !lastCompletedAt) {
-    return null;
+export function getCompletionStreak(task: Task): number {
+  // This would require completion history, which isn't in our current data model
+  // For now, return 1 if completed, 0 if not
+  return task.lastCompletedAt ? 1 : 0;
+}
+
+/**
+ * Check if a task was completed today
+ */
+export function wasCompletedToday(task: Task, currentDate: Date = new Date()): boolean {
+  if (!task.lastCompletedAt) {
+    return false;
   }
 
-  const nextDate = new Date(lastCompletedAt);
+  const today = new Date(currentDate);
+  today.setHours(0, 0, 0, 0);
+  
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  const completedAt = new Date(task.lastCompletedAt);
+  
+  return completedAt >= today && completedAt < tomorrow;
+}
 
-  switch (expectedFrequency.unit) {
-    case 'day':
-      nextDate.setDate(nextDate.getDate() + expectedFrequency.value);
-      break;
-    case 'week':
-      nextDate.setDate(nextDate.getDate() + expectedFrequency.value * 7);
-      break;
-    case 'month':
-      nextDate.setMonth(nextDate.getMonth() + expectedFrequency.value);
-      break;
-    case 'year':
-      nextDate.setFullYear(nextDate.getFullYear() + expectedFrequency.value);
-      break;
+/**
+ * Get relative time description for task completion
+ */
+export function getCompletionTimeDescription(task: Task): string {
+  if (!task.lastCompletedAt) {
+    return 'Never completed';
   }
 
-  return nextDate;
+  const now = new Date();
+  const completedAt = new Date(task.lastCompletedAt);
+  const diffInHours = (now.getTime() - completedAt.getTime()) / (1000 * 60 * 60);
+
+  if (diffInHours < 1) {
+    return 'Just completed';
+  }
+  if (diffInHours < 24) {
+    return 'Completed today';
+  }
+  if (diffInHours < 48) {
+    return 'Completed yesterday';
+  }
+  return formatTimeElapsed(completedAt);
 }

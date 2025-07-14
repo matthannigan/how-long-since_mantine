@@ -31,8 +31,8 @@ The plan prioritizes core functionality first, then enhances with advanced featu
     - Write comprehensive unit tests for all service methods
     - _Requirements: 1.7, 1.8, 1.9, 1.10, 2.1, 2.2, 2.3, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7_
 
-- [ ] 3. Task Management Core Features
-  - [ ] 3.1 Task Creation and Editing
+- [x] 3. Task Management Core Features
+  - [x] 3.1 Task Creation and Editing
     - Build TaskForm component with validation and accessibility features
     - Implement form field validation with clear error messaging
     - Create task creation workflow with category assignment
@@ -40,7 +40,7 @@ The plan prioritizes core functionality first, then enhances with advanced featu
     - Write tests for form validation and submission
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 8.6_
 
-  - [ ] 3.2 Task Completion System
+  - [x] 3.2 Task Completion System
     - Implement task completion logic with timestamp tracking
     - Create "Just Done" button component with proper accessibility
     - Build undo functionality for accidental completions
@@ -49,7 +49,7 @@ The plan prioritizes core functionality first, then enhances with advanced featu
     - Write tests for completion logic and overdue status
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 5.1, 5.2, 5.3, 5.6, 5.7_
 
-  - [ ] 3.3 Task Display and Time Formatting
+  - [x] 3.3 Task Display and Time Formatting
     - Create utility functions for human-readable time elapsed formatting
     - Implement TaskCard component with proper visual hierarchy
     - Add overdue indicators with multiple accessibility-compliant signals
