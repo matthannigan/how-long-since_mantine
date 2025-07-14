@@ -1,0 +1,23 @@
+{
+  "enabled": true,
+  "name": "Lint on Save",
+  "description": "Automatically runs ESLint and Stylelint to identify and correct linting errors whenever JavaScript, TypeScript, CSS, or related files are saved",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.{js",
+      "jsx",
+      "ts",
+      "tsx",
+      "css",
+      "scss",
+      "sass",
+      "less}"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A file has been saved that may contain linting errors. Please run ESLint and Stylelint to identify and automatically fix any linting issues in the saved file. Use eslint --fix for JavaScript/TypeScript files and stylelint --fix for CSS files. Report any errors that cannot be automatically fixed and suggest manual corrections."
+  }
+}
