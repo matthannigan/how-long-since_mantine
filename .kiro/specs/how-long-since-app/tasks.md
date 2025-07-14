@@ -15,7 +15,7 @@ The plan prioritizes core functionality first, then enhances with advanced featu
   - Set up IndexedDB database schema using Dexie.js
   - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5_
 
-- [ ] 2. Core Data Layer Implementation
+- [x] 2. Core Data Layer Implementation
   - [x] 2.1 Database Schema and Models
     - Implement Task, Category, and AppSettings TypeScript interfaces
     - Create Dexie database class with proper indexing for performance
@@ -23,7 +23,7 @@ The plan prioritizes core functionality first, then enhances with advanced featu
     - Implement data validation using Zod schemas
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 7.1, 7.8_
 
-  - [ ] 2.2 Service Layer Implementation
+  - [x] 2.2 Service Layer Implementation
     - Create TaskService with CRUD operations and business logic
     - Implement CategoryService with default category initialization
     - Build SettingsService for user preferences management
