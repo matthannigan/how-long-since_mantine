@@ -7270,6 +7270,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "date-fns@npm:4.1.0"
+  checksum: 10c0/b79ff32830e6b7faa009590af6ae0fb8c3fd9ffad46d930548fbb5acf473773b4712ae887e156ba91a7b3dc30591ce0f517d69fd83bd9c38650fdc03b4e0bac8
+  languageName: node
+  linkType: hard
+
 "debounce@npm:^1.2.1":
   version: 1.2.1
   resolution: "debounce@npm:1.2.1"
@@ -7430,6 +7437,13 @@ __metadata:
   version: 1.1.0
   resolution: "detect-node-es@npm:1.1.0"
   checksum: 10c0/e562f00de23f10c27d7119e1af0e7388407eb4b06596a25f6d79a360094a109ff285de317f02b090faae093d314cf6e73ac3214f8a5bb3a0def5bece94557fbe
+  languageName: node
+  linkType: hard
+
+"dexie@npm:^4.0.11":
+  version: 4.0.11
+  resolution: "dexie@npm:4.0.11"
+  checksum: 10c0/f8f18e17fe99fd3d4bd80a4ff76c0a543be128bb65a11b6b34297c6ab2d7426989567a8eac09b0de6b483bfb776cbbb32bebe3eedcd5c572ddda80224aac1fa1
   languageName: node
   linkType: hard
 
@@ -11371,6 +11385,8 @@ __metadata:
     "@types/node": "npm:^22.13.11"
     "@types/react": "npm:19.1.8"
     babel-loader: "npm:^10.0.0"
+    date-fns: "npm:^4.1.0"
+    dexie: "npm:^4.0.11"
     eslint: "npm:^9.29.0"
     eslint-config-mantine: "npm:^4.0.3"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -11391,6 +11407,7 @@ __metadata:
     ts-jest: "npm:^29.4.0"
     typescript: "npm:5.8.3"
     typescript-eslint: "npm:^8.34.0"
+    zod: "npm:^4.0.5"
   languageName: unknown
   linkType: soft
 
@@ -16048,5 +16065,12 @@ __metadata:
   version: 1.0.0
   resolution: "yocto-queue@npm:1.0.0"
   checksum: 10c0/856117aa15cf5103d2a2fb173f0ab4acb12b4b4d0ed3ab249fdbbf612e55d1cadfd27a6110940e24746fb0a78cf640b522cc8bca76f30a3b00b66e90cf82abe0
+  languageName: node
+  linkType: hard
+
+"zod@npm:^4.0.5":
+  version: 4.0.5
+  resolution: "zod@npm:4.0.5"
+  checksum: 10c0/59449d731ca63849b6bcb14300aa6e2f042d440b3ed294b45c248519aec78780f85a5d1939a62c2ce82e9dc60afca77c8005e0a98d7517b0c2586d6c76940424
   languageName: node
   linkType: hard
