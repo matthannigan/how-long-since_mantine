@@ -68,12 +68,90 @@ export interface Migration {
   migrate: () => Promise<void>;
 }
 
+// Track migration state
+interface MigrationState {
+  id: string;
+  lastMigrationVersion: number;
+  migratedAt: Date;
+}
+
 export const migrations: Migration[] = [
   // Future migrations will be added here
+  // Example:
+  // {
+  //   version: 2,
+  //   description: 'Add task priority field',
+  //   migrate: async () => {
+  //     // Migration logic here
+  //   }
+  // }
 ];
 
+// Get current migration version from database
+async function getCurrentMigrationVersion(): Promise<number> {
+  try {
+    const migrationState = await db.transaction('r', db.settings, async () => {
+      return await db.settings.get('migration_state');
+    });
+
+    return (migrationState as any)?.lastMigrationVersion || 1;
+  } catch (error) {
+    // If migration state doesn't exist, assume version 1 (initial schema)
+    return 1;
+  }
+}
+
+// Update migration version in database
+async function updateMigrationVersion(version: number): Promise<void> {
+  const migrationState: MigrationState = {
+    id: 'migration_state',
+    lastMigrationVersion: version,
+    migratedAt: new Date(),
+  };
+
+  await db.settings.put(migrationState as any);
+}
+
+// Run pending migrations
 export async function runMigrations(): Promise<void> {
-  // This will be implemented when we need to handle schema changes
-  // eslint-disable-next-line no-console
-  console.log('No migrations to run');
+  try {
+    const currentVersion = await getCurrentMigrationVersion();
+    const pendingMigrations = migrations.filter((m) => m.version > currentVersion);
+
+    if (pendingMigrations.length === 0) {
+      // eslint-disable-next-line no-console
+      console.log('Database is up to date');
+      return;
+    }
+
+    // Sort migrations by version to ensure proper order
+    pendingMigrations.sort((a, b) => a.version - b.version);
+
+    // eslint-disable-next-line no-console
+    console.log(`Running ${pendingMigrations.length} pending migrations...`);
+
+    for (const migration of pendingMigrations) {
+      // eslint-disable-next-line no-console
+      console.log(`Running migration ${migration.version}: ${migration.description}`);
+
+      try {
+        await migration.migrate();
+        await updateMigrationVersion(migration.version);
+
+        // eslint-disable-next-line no-console
+        console.log(`Migration ${migration.version} completed successfully`);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(`Migration ${migration.version} failed:`, error);
+        throw new Error(`Migration ${migration.version} failed: ${error}`);
+      }
+    }
+
+    // eslint-disable-next-line no-console
+    console.log('All migrations completed successfully');
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Migration process failed:', error);
+    throw error;
+  }
 }

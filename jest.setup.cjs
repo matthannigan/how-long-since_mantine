@@ -1,8 +1,16 @@
 require('@testing-library/jest-dom');
+require('fake-indexeddb/auto');
 
 const { getComputedStyle } = window;
 window.getComputedStyle = (elt) => getComputedStyle(elt);
 window.HTMLElement.prototype.scrollIntoView = () => {};
+
+// Polyfill for structuredClone (needed for fake-indexeddb)
+if (!global.structuredClone) {
+  global.structuredClone = (obj) => {
+    return JSON.parse(JSON.stringify(obj));
+  };
+}
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
