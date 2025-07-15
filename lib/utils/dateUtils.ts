@@ -1,5 +1,5 @@
-import { formatDistanceToNow, isAfter, addDays, addWeeks, addMonths, addYears } from 'date-fns';
-import type { Task, ExpectedFrequency } from '@/types';
+import { addDays, addMonths, addWeeks, addYears, formatDistanceToNow, isAfter } from 'date-fns';
+import type { ExpectedFrequency, Task } from '@/types';
 
 /**
  * Format time elapsed since a date in human-readable format
@@ -31,7 +31,7 @@ export function calculateNextDueDate(
   }
 
   const { value, unit } = expectedFrequency;
-  
+
   try {
     switch (unit) {
       case 'day':
@@ -62,7 +62,7 @@ export function isTaskOverdue(task: Task, currentDate: Date = new Date()): boole
   }
 
   const nextDueDate = calculateNextDueDate(task.lastCompletedAt, task.expectedFrequency);
-  
+
   if (!nextDueDate) {
     return false;
   }
@@ -76,9 +76,9 @@ export function isTaskOverdue(task: Task, currentDate: Date = new Date()): boole
 export function getOverdueStatus(task: Task, currentDate: Date = new Date()) {
   const isOverdue = isTaskOverdue(task, currentDate);
   const nextDueDate = calculateNextDueDate(task.lastCompletedAt, task.expectedFrequency);
-  
+
   let overdueBy: string | null = null;
-  
+
   if (isOverdue && nextDueDate) {
     try {
       overdueBy = formatDistanceToNow(nextDueDate, { addSuffix: false });
@@ -102,7 +102,7 @@ export function getOverdueStatus(task: Task, currentDate: Date = new Date()) {
  */
 export function getTimeUntilDue(task: Task, currentDate: Date = new Date()): string | null {
   const nextDueDate = calculateNextDueDate(task.lastCompletedAt, task.expectedFrequency);
-  
+
   if (!nextDueDate) {
     return null;
   }
@@ -126,7 +126,7 @@ export function getTimeUntilDue(task: Task, currentDate: Date = new Date()): str
  */
 export function formatExpectedFrequency(frequency: ExpectedFrequency): string {
   const { value, unit } = frequency;
-  
+
   let unitLabel: string;
   if (value === 1) {
     unitLabel = unit;
@@ -156,12 +156,12 @@ export function wasCompletedToday(task: Task, currentDate: Date = new Date()): b
 
   const today = new Date(currentDate);
   today.setHours(0, 0, 0, 0);
-  
+
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
-  
+
   const completedAt = new Date(task.lastCompletedAt);
-  
+
   return completedAt >= today && completedAt < tomorrow;
 }
 

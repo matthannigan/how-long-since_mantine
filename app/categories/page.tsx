@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Title, Space } from '@mantine/core';
+import { Container, Title } from '@mantine/core';
 import { CategoryList } from '@/components/category';
 
 export default function CategoriesPage() {
@@ -9,7 +9,7 @@ export default function CategoriesPage() {
       <Title order={1} mb="lg">
         Manage Categories
       </Title>
-      
+
       <CategoryList />
     </Container>
   );

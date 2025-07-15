@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ActionIcon, Button, Group, Text, Tooltip } from '@mantine/core';
 import { IconCheck, IconUndo } from '@tabler/icons-react';
+import { ActionIcon, Button, Group, Text, Tooltip } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import type { Task } from '@/types';
 
@@ -45,13 +45,13 @@ export function TaskCompletionButton({
     }
 
     setIsCompleting(true);
-    
+
     try {
       await onComplete(task.id);
-      
+
       if (showUndo && onUndoComplete) {
         setShowUndoNotification(true);
-        
+
         // Show success notification with undo option
         const notificationId = notifications.show({
           title: 'Task Completed! 🎉',
@@ -79,7 +79,7 @@ export function TaskCompletionButton({
           setShowUndoNotification(false);
           notifications.hide(notificationId);
         }, undoTimeout);
-        
+
         setUndoTimer(timer);
       } else {
         // Simple success notification without undo
@@ -112,15 +112,15 @@ export function TaskCompletionButton({
 
     try {
       await onUndoComplete(task.id);
-      
+
       // Clear the undo timer
       if (undoTimer) {
         clearTimeout(undoTimer);
         setUndoTimer(null);
       }
-      
+
       setShowUndoNotification(false);
-      
+
       notifications.show({
         title: 'Task Completion Undone',
         message: `"${task.name}" has been marked as not completed.`,
@@ -142,7 +142,7 @@ export function TaskCompletionButton({
 
   const isCompleted = task.lastCompletedAt !== null;
   const buttonLabel = isCompleted ? 'Mark as not done' : 'Just Done';
-  const tooltipLabel = isCompleted 
+  const tooltipLabel = isCompleted
     ? `Mark "${task.name}" as not completed`
     : `Mark "${task.name}" as completed`;
 

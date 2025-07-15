@@ -1,4 +1,4 @@
-import { ActionIcon, Group, ColorSwatch, Tooltip } from '@mantine/core';
+import { ActionIcon, ColorSwatch, Group, Tooltip } from '@mantine/core';
 import { AVAILABLE_COLORS } from '@/lib/constants/categories';
 
 interface CategoryColorPickerProps {
@@ -15,12 +15,7 @@ export function CategoryColorPicker({
   return (
     <Group gap="xs">
       {AVAILABLE_COLORS.map((color) => (
-        <Tooltip
-          key={color}
-          label={`Select ${color}`}
-          position="top"
-          withArrow
-        >
+        <Tooltip key={color} label={`Select ${color}`} position="top" withArrow>
           <ActionIcon
             variant={value === color ? 'filled' : 'subtle'}
             size="lg"

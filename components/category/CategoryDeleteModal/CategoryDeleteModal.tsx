@@ -1,20 +1,10 @@
-import { useState, useEffect } from 'react';
-import {
-  Button,
-  Group,
-  Modal,
-  Stack,
-  Text,
-  Title,
-  Select,
-  Alert,
-  Divider,
-} from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { IconAlertTriangle, IconCheck, IconTrash, IconX } from '@tabler/icons-react';
+import { Alert, Button, Divider, Group, Modal, Select, Stack, Text, Title } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconAlertTriangle, IconCheck, IconX, IconTrash } from '@tabler/icons-react';
-import { CategoryBadge } from '../CategoryBadge/CategoryBadge';
 import { categoryService } from '@/lib/services/CategoryService';
-import type { Category, CategoryWithTaskCount } from '@/types';
+import type { Category } from '@/types';
+import { CategoryBadge } from '../CategoryBadge/CategoryBadge';
 
 interface CategoryDeleteModalProps {
   opened: boolean;
@@ -41,19 +31,21 @@ export function CategoryDeleteModal({
   }, [opened, category]);
 
   const loadCategoryData = async () => {
-    if (!category) return;
+    if (!category) {
+      return;
+    }
 
     try {
       // Get categories with task counts
       const categoriesWithCounts = await categoryService.getCategoriesWithTaskCounts();
-      const currentCategory = categoriesWithCounts.find(c => c.id === category.id);
-      
+      const currentCategory = categoriesWithCounts.find((c) => c.id === category.id);
+
       if (currentCategory) {
         setTaskCount(currentCategory.taskCount);
       }
 
       // Get other categories for reassignment
-      const otherCategories = categoriesWithCounts.filter(c => c.id !== category.id);
+      const otherCategories = categoriesWithCounts.filter((c) => c.id !== category.id);
       setAvailableCategories(otherCategories);
 
       // Auto-select first available category if tasks exist
@@ -71,7 +63,9 @@ export function CategoryDeleteModal({
   };
 
   const handleDelete = async () => {
-    if (!category) return;
+    if (!category) {
+      return;
+    }
 
     setLoading(true);
     try {
@@ -85,7 +79,7 @@ export function CategoryDeleteModal({
           });
           return;
         }
-        
+
         await categoryService.deleteCategoryWithReassignment(category.id, selectedCategoryId);
         notifications.show({
           title: 'Success',
@@ -125,7 +119,9 @@ export function CategoryDeleteModal({
     }
   };
 
-  if (!category) return null;
+  if (!category) {
+    return null;
+  }
 
   const canDelete = !category.isDefault;
   const hasTasksToReassign = taskCount > 0;
@@ -168,8 +164,8 @@ export function CategoryDeleteModal({
                   title="Tasks Need Reassignment"
                   color="yellow"
                 >
-                  This category has {taskCount} task{taskCount !== 1 ? 's' : ''} assigned to it.
-                  You must choose another category to reassign these tasks to before deletion.
+                  This category has {taskCount} task{taskCount !== 1 ? 's' : ''} assigned to it. You
+                  must choose another category to reassign these tasks to before deletion.
                 </Alert>
 
                 <div>
@@ -192,11 +188,7 @@ export function CategoryDeleteModal({
             )}
 
             {!hasTasksToReassign && (
-              <Alert
-                icon={<IconAlertTriangle size={16} />}
-                title="Confirm Deletion"
-                color="red"
-              >
+              <Alert icon={<IconAlertTriangle size={16} />} title="Confirm Deletion" color="red">
                 This action cannot be undone. The category will be permanently deleted.
               </Alert>
             )}
@@ -204,11 +196,7 @@ export function CategoryDeleteModal({
             <Divider />
 
             <Group justify="flex-end">
-              <Button
-                variant="subtle"
-                onClick={handleClose}
-                disabled={loading}
-              >
+              <Button variant="subtle" onClick={handleClose} disabled={loading}>
                 Cancel
               </Button>
               <Button

@@ -184,7 +184,7 @@ export class CategoryService {
       await db.transaction('rw', [db.tasks, db.categories], async () => {
         // Get all tasks that need to be reassigned
         const tasksToReassign = await db.tasks.where('categoryId').equals(id).toArray();
-        
+
         // Update each task individually to avoid validation issues during bulk modify
         for (const task of tasksToReassign) {
           await db.tasks.update(task.id, { categoryId: newCategoryId });
@@ -333,9 +333,8 @@ export class CategoryService {
 
     const { value, unit } = task.expectedFrequency;
     // Ensure lastCompletedAt is a Date object
-    const lastCompleted = task.lastCompletedAt instanceof Date 
-      ? task.lastCompletedAt 
-      : new Date(task.lastCompletedAt);
+    const lastCompleted =
+      task.lastCompletedAt instanceof Date ? task.lastCompletedAt : new Date(task.lastCompletedAt);
     const now = new Date();
 
     // Calculate next due date

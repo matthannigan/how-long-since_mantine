@@ -1,10 +1,10 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { CategoryForm } from './CategoryForm';
 import { categoryService } from '@/lib/services/CategoryService';
 import type { Category } from '@/types';
+import { CategoryForm } from './CategoryForm';
 
 // Mock the category service
 jest.mock('@/lib/services/CategoryService');
@@ -47,12 +47,7 @@ describe('CategoryForm', () => {
   describe('Create Mode', () => {
     it('renders create form correctly', () => {
       renderWithProviders(
-        <CategoryForm
-          opened={true}
-          onClose={mockOnClose}
-          onSuccess={mockOnSuccess}
-          mode="create"
-        />
+        <CategoryForm opened onClose={mockOnClose} onSuccess={mockOnSuccess} mode="create" />
       );
 
       expect(screen.getByText('Create New Category')).toBeInTheDocument();
@@ -68,17 +63,12 @@ describe('CategoryForm', () => {
       mockCategoryService.createCategory.mockResolvedValue(createdCategory);
 
       renderWithProviders(
-        <CategoryForm
-          opened={true}
-          onClose={mockOnClose}
-          onSuccess={mockOnSuccess}
-          mode="create"
-        />
+        <CategoryForm opened onClose={mockOnClose} onSuccess={mockOnSuccess} mode="create" />
       );
 
       // Fill in the form
       await user.type(screen.getByRole('textbox', { name: /category name/i }), 'New Category');
-      
+
       // Submit the form
       await user.click(screen.getByRole('button', { name: 'Create Category' }));
 
@@ -98,12 +88,7 @@ describe('CategoryForm', () => {
       const user = userEvent.setup();
 
       renderWithProviders(
-        <CategoryForm
-          opened={true}
-          onClose={mockOnClose}
-          onSuccess={mockOnSuccess}
-          mode="create"
-        />
+        <CategoryForm opened onClose={mockOnClose} onSuccess={mockOnSuccess} mode="create" />
       );
 
       // Try to submit without entering a name
@@ -120,12 +105,7 @@ describe('CategoryForm', () => {
       const user = userEvent.setup();
 
       renderWithProviders(
-        <CategoryForm
-          opened={true}
-          onClose={mockOnClose}
-          onSuccess={mockOnSuccess}
-          mode="create"
-        />
+        <CategoryForm opened onClose={mockOnClose} onSuccess={mockOnSuccess} mode="create" />
       );
 
       // Enter a name that's too long
@@ -145,12 +125,7 @@ describe('CategoryForm', () => {
       mockCategoryService.createCategory.mockRejectedValue(new Error('Service error'));
 
       renderWithProviders(
-        <CategoryForm
-          opened={true}
-          onClose={mockOnClose}
-          onSuccess={mockOnSuccess}
-          mode="create"
-        />
+        <CategoryForm opened onClose={mockOnClose} onSuccess={mockOnSuccess} mode="create" />
       );
 
       await user.type(screen.getByRole('textbox', { name: /category name/i }), 'Test Category');
@@ -170,7 +145,7 @@ describe('CategoryForm', () => {
     it('renders edit form with pre-filled values', () => {
       renderWithProviders(
         <CategoryForm
-          opened={true}
+          opened
           onClose={mockOnClose}
           onSuccess={mockOnSuccess}
           category={mockCategory}
@@ -190,7 +165,7 @@ describe('CategoryForm', () => {
 
       renderWithProviders(
         <CategoryForm
-          opened={true}
+          opened
           onClose={mockOnClose}
           onSuccess={mockOnSuccess}
           category={mockCategory}
@@ -202,7 +177,7 @@ describe('CategoryForm', () => {
       const nameInput = screen.getByDisplayValue('Test Category');
       await user.clear(nameInput);
       await user.type(nameInput, 'Updated Category');
-      
+
       // Submit the form
       await user.click(screen.getByRole('button', { name: 'Save Changes' }));
 
@@ -222,12 +197,7 @@ describe('CategoryForm', () => {
       const user = userEvent.setup();
 
       renderWithProviders(
-        <CategoryForm
-          opened={true}
-          onClose={mockOnClose}
-          onSuccess={mockOnSuccess}
-          mode="edit"
-        />
+        <CategoryForm opened onClose={mockOnClose} onSuccess={mockOnSuccess} mode="edit" />
       );
 
       await user.click(screen.getByRole('button', { name: 'Save Changes' }));
@@ -242,12 +212,7 @@ describe('CategoryForm', () => {
       const user = userEvent.setup();
 
       renderWithProviders(
-        <CategoryForm
-          opened={true}
-          onClose={mockOnClose}
-          onSuccess={mockOnSuccess}
-          mode="create"
-        />
+        <CategoryForm opened onClose={mockOnClose} onSuccess={mockOnSuccess} mode="create" />
       );
 
       await user.click(screen.getByRole('button', { name: 'Cancel' }));
@@ -261,12 +226,7 @@ describe('CategoryForm', () => {
       mockCategoryService.createCategory.mockImplementation(() => new Promise(() => {}));
 
       renderWithProviders(
-        <CategoryForm
-          opened={true}
-          onClose={mockOnClose}
-          onSuccess={mockOnSuccess}
-          mode="create"
-        />
+        <CategoryForm opened onClose={mockOnClose} onSuccess={mockOnSuccess} mode="create" />
       );
 
       await user.type(screen.getByRole('textbox', { name: /category name/i }), 'Test');
@@ -281,12 +241,7 @@ describe('CategoryForm', () => {
 
     it('focuses on name input when opened', () => {
       renderWithProviders(
-        <CategoryForm
-          opened={true}
-          onClose={mockOnClose}
-          onSuccess={mockOnSuccess}
-          mode="create"
-        />
+        <CategoryForm opened onClose={mockOnClose} onSuccess={mockOnSuccess} mode="create" />
       );
 
       const nameInput = screen.getByRole('textbox', { name: /category name/i });

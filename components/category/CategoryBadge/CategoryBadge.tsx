@@ -1,5 +1,5 @@
-import { Badge, Group } from '@mantine/core';
 import * as TablerIcons from '@tabler/icons-react';
+import { Badge } from '@mantine/core';
 import type { Category } from '@/types';
 
 interface CategoryBadgeProps {
@@ -17,8 +17,10 @@ export function CategoryBadge({
 }: CategoryBadgeProps) {
   // Get the icon component dynamically
   const getIconComponent = (iconName?: string) => {
-    if (!iconName) return null;
-    
+    if (!iconName) {
+      return null;
+    }
+
     const IconComponent = (TablerIcons as any)[
       `Icon${iconName
         .split('-')

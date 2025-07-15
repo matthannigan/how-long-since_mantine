@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { MantineProvider } from '@mantine/core';
-import { TaskForm } from './TaskForm';
 import type { Category } from '@/types';
+import { TaskForm } from './TaskForm';
 
 // Mock categories for testing
 const mockCategories: Category[] = [

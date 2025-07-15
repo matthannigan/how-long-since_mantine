@@ -1,7 +1,6 @@
-import { categoryService } from '../CategoryService';
 import { db } from '@/lib/db';
-import type { Category, CategoryFormData } from '@/types';
-
+import type { CategoryFormData } from '@/types';
+import { categoryService } from '../CategoryService';
 // Setup fake IndexedDB for testing
 import 'fake-indexeddb/auto';
 
@@ -43,14 +42,14 @@ describe('CategoryService Integration Tests', () => {
     it('should prevent duplicate category names', async () => {
       await categoryService.createCategory(mockCategoryData);
 
-      await expect(
-        categoryService.createCategory(mockCategoryData)
-      ).rejects.toThrow('A category with this name already exists');
+      await expect(categoryService.createCategory(mockCategoryData)).rejects.toThrow(
+        'A category with this name already exists'
+      );
     });
 
     it('should update an existing category', async () => {
       const category = await categoryService.createCategory(mockCategoryData);
-      
+
       const updates: Partial<CategoryFormData> = {
         name: 'Updated Category',
         color: '#EF4444',
@@ -76,7 +75,7 @@ describe('CategoryService Integration Tests', () => {
       });
 
       await expect(
-        categoryService.updateCategory(category2.id, { name: 'Test Category' })
+        categoryService.updateCategory(category2.id, { name: category1.name })
       ).rejects.toThrow('A category with this name already exists');
     });
 
@@ -93,12 +92,12 @@ describe('CategoryService Integration Tests', () => {
       // Initialize default categories
       await categoryService.initializeDefaultCategories();
       const categories = await categoryService.getAllCategories();
-      const defaultCategory = categories.find(cat => cat.isDefault);
+      const defaultCategory = categories.find((cat) => cat.isDefault);
 
       if (defaultCategory) {
-        await expect(
-          categoryService.deleteCategory(defaultCategory.id)
-        ).rejects.toThrow('Cannot delete default categories');
+        await expect(categoryService.deleteCategory(defaultCategory.id)).rejects.toThrow(
+          'Cannot delete default categories'
+        );
       }
     });
 
@@ -117,9 +116,9 @@ describe('CategoryService Integration Tests', () => {
         notes: '',
       });
 
-      await expect(
-        categoryService.deleteCategory(category.id)
-      ).rejects.toThrow('Cannot delete category with 1 assigned tasks');
+      await expect(categoryService.deleteCategory(category.id)).rejects.toThrow(
+        'Cannot delete category with 1 assigned tasks'
+      );
     });
 
     it('should delete category with task reassignment', async () => {
@@ -203,11 +202,11 @@ describe('CategoryService Integration Tests', () => {
       const categories = await categoryService.getAllCategories();
       expect(categories.length).toBeGreaterThan(0);
 
-      const defaultCategories = categories.filter(cat => cat.isDefault);
+      const defaultCategories = categories.filter((cat) => cat.isDefault);
       expect(defaultCategories.length).toBeGreaterThan(0);
 
       // Check that Kitchen category exists (from default set)
-      const kitchenCategory = categories.find(cat => cat.name === 'Kitchen');
+      const kitchenCategory = categories.find((cat) => cat.name === 'Kitchen');
       expect(kitchenCategory).toBeDefined();
       expect(kitchenCategory?.isDefault).toBe(true);
     });
@@ -246,7 +245,7 @@ describe('CategoryService Integration Tests', () => {
       const tasks = await db.tasks.toArray();
 
       // Should only have default categories
-      expect(categories.every(cat => cat.isDefault)).toBe(true);
+      expect(categories.every((cat) => cat.isDefault)).toBe(true);
       // Should have no tasks
       expect(tasks.length).toBe(0);
     });
@@ -295,7 +294,7 @@ describe('CategoryService Integration Tests', () => {
       ]);
 
       const categoriesWithCounts = await categoryService.getCategoriesWithTaskCounts();
-      const categoryWithCount = categoriesWithCounts.find(cat => cat.id === category.id);
+      const categoryWithCount = categoriesWithCounts.find((cat) => cat.id === category.id);
 
       expect(categoryWithCount).toBeDefined();
       expect(categoryWithCount?.taskCount).toBe(2); // Excludes archived

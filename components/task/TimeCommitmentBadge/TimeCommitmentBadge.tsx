@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Badge, Group, Text, Tooltip } from '@mantine/core';
 import { IconClock } from '@tabler/icons-react';
+import { Badge, Group, Text, Tooltip } from '@mantine/core';
 import { getTimeCommitmentInfo } from '@/lib/constants/timeCommitments';
 import type { TimeCommitment } from '@/types';
 
@@ -27,7 +27,7 @@ export function TimeCommitmentBadge({
   showIcon = true,
 }: TimeCommitmentBadgeProps) {
   const info = getTimeCommitmentInfo(commitment);
-  
+
   const circles = Array.from({ length: 6 }, (_, index) => (
     <div
       key={index}
@@ -35,9 +35,8 @@ export function TimeCommitmentBadge({
         width: size === 'xs' ? '4px' : size === 'sm' ? '5px' : '6px',
         height: size === 'xs' ? '4px' : size === 'sm' ? '5px' : '6px',
         borderRadius: '50%',
-        backgroundColor: index < info.circles 
-          ? 'var(--mantine-color-blue-6)' 
-          : 'var(--mantine-color-gray-3)',
+        backgroundColor:
+          index < info.circles ? 'var(--mantine-color-blue-6)' : 'var(--mantine-color-gray-3)',
         transition: 'background-color 0.2s ease',
       }}
       aria-hidden="true"
@@ -47,15 +46,9 @@ export function TimeCommitmentBadge({
   const badgeContent = (
     <Group gap={size === 'xs' ? 4 : 6} align="center">
       {showIcon && (
-        <IconClock 
-          size={size === 'xs' ? 10 : size === 'sm' ? 12 : 14} 
-          aria-hidden="true"
-        />
+        <IconClock size={size === 'xs' ? 10 : size === 'sm' ? 12 : 14} aria-hidden="true" />
       )}
-      <Text 
-        size={size === 'xs' ? 'xs' : size === 'sm' ? 'xs' : 'sm'}
-        fw={500}
-      >
+      <Text size={size === 'xs' ? 'xs' : size === 'sm' ? 'xs' : 'sm'} fw={500}>
         {info.label}
       </Text>
       {showCircles && (

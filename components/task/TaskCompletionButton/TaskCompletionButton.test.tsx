@@ -3,8 +3,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
-import { TaskCompletionButton } from './TaskCompletionButton';
 import type { Task } from '@/types';
+import { TaskCompletionButton } from './TaskCompletionButton';
 
 // Mock task data
 const mockTask: Task = {
@@ -92,11 +92,7 @@ describe('TaskCompletionButton', () => {
     it('shows loading state', () => {
       render(
         <TestWrapper>
-          <TaskCompletionButton
-            task={mockTask}
-            onComplete={mockOnComplete}
-            loading
-          />
+          <TaskCompletionButton task={mockTask} onComplete={mockOnComplete} loading />
         </TestWrapper>
       );
 
@@ -107,16 +103,12 @@ describe('TaskCompletionButton', () => {
     it('meets accessibility requirements for touch targets', () => {
       render(
         <TestWrapper>
-          <TaskCompletionButton
-            task={mockTask}
-            onComplete={mockOnComplete}
-            size="md"
-          />
+          <TaskCompletionButton task={mockTask} onComplete={mockOnComplete} size="md" />
         </TestWrapper>
       );
 
       const button = screen.getByTestId('task-completion-button');
-      
+
       // Should have minimum 44px touch target
       expect(button).toHaveStyle('min-width: 44px');
       expect(button).toHaveStyle('min-height: 44px');
@@ -127,11 +119,7 @@ describe('TaskCompletionButton', () => {
     it('renders button variant correctly', () => {
       render(
         <TestWrapper>
-          <TaskCompletionButton
-            task={mockTask}
-            onComplete={mockOnComplete}
-            variant="button"
-          />
+          <TaskCompletionButton task={mockTask} onComplete={mockOnComplete} variant="button" />
         </TestWrapper>
       );
 
@@ -142,11 +130,7 @@ describe('TaskCompletionButton', () => {
     it('shows different text for completed task', () => {
       render(
         <TestWrapper>
-          <TaskCompletionButton
-            task={completedTask}
-            onComplete={mockOnComplete}
-            variant="button"
-          />
+          <TaskCompletionButton task={completedTask} onComplete={mockOnComplete} variant="button" />
         </TestWrapper>
       );
 
@@ -173,7 +157,7 @@ describe('TaskCompletionButton', () => {
       await user.click(button);
 
       expect(mockOnComplete).toHaveBeenCalledWith('1');
-      
+
       // Should not show undo button
       await waitFor(() => {
         expect(screen.queryByTestId('undo-button')).not.toBeInTheDocument();
@@ -214,13 +198,10 @@ describe('TaskCompletionButton', () => {
     it('handles completion errors gracefully', async () => {
       const user = userEvent.setup();
       const mockOnCompleteError = jest.fn().mockRejectedValue(new Error('Completion failed'));
-      
+
       render(
         <TestWrapper>
-          <TaskCompletionButton
-            task={mockTask}
-            onComplete={mockOnCompleteError}
-          />
+          <TaskCompletionButton task={mockTask} onComplete={mockOnCompleteError} />
         </TestWrapper>
       );
 
@@ -228,7 +209,7 @@ describe('TaskCompletionButton', () => {
       await user.click(button);
 
       expect(mockOnCompleteError).toHaveBeenCalledWith('1');
-      
+
       // Should show error notification
       await waitFor(() => {
         expect(screen.getByText('Error')).toBeInTheDocument();
@@ -238,7 +219,7 @@ describe('TaskCompletionButton', () => {
     it('handles undo errors gracefully', async () => {
       const user = userEvent.setup();
       const mockOnUndoError = jest.fn().mockRejectedValue(new Error('Undo failed'));
-      
+
       render(
         <TestWrapper>
           <TaskCompletionButton
@@ -267,10 +248,7 @@ describe('TaskCompletionButton', () => {
     it('has proper ARIA labels', () => {
       render(
         <TestWrapper>
-          <TaskCompletionButton
-            task={mockTask}
-            onComplete={mockOnComplete}
-          />
+          <TaskCompletionButton task={mockTask} onComplete={mockOnComplete} />
         </TestWrapper>
       );
 
@@ -282,15 +260,12 @@ describe('TaskCompletionButton', () => {
       const user = userEvent.setup();
       render(
         <TestWrapper>
-          <TaskCompletionButton
-            task={mockTask}
-            onComplete={mockOnComplete}
-          />
+          <TaskCompletionButton task={mockTask} onComplete={mockOnComplete} />
         </TestWrapper>
       );
 
       const button = screen.getByTestId('task-completion-button');
-      
+
       // Focus the button
       button.focus();
       expect(button).toHaveFocus();
@@ -304,15 +279,12 @@ describe('TaskCompletionButton', () => {
       const user = userEvent.setup();
       render(
         <TestWrapper>
-          <TaskCompletionButton
-            task={mockTask}
-            onComplete={mockOnComplete}
-          />
+          <TaskCompletionButton task={mockTask} onComplete={mockOnComplete} />
         </TestWrapper>
       );
 
       const button = screen.getByTestId('task-completion-button');
-      
+
       // Focus the button
       button.focus();
       expect(button).toHaveFocus();

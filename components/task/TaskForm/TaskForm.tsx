@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import {
   Button,
   Group,
@@ -13,10 +14,9 @@ import {
   Title,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { IconCheck, IconX } from '@tabler/icons-react';
-import { TaskFormDataSchema } from '@/lib/validation/schemas';
 import { getTimeCommitmentOptions } from '@/lib/constants/timeCommitments';
-import type { Category, TaskFormData, FrequencyUnit } from '@/types';
+import { TaskFormDataSchema } from '@/lib/validation/schemas';
+import type { Category, FrequencyUnit, TaskFormData } from '@/types';
 
 interface TaskFormProps {
   /** Initial task data for editing (undefined for creating new task) */
@@ -149,7 +149,7 @@ export function TaskForm({
           <Text size="xs" c="dimmed">
             How often should this task be done? This helps identify overdue tasks.
           </Text>
-          
+
           <Group gap="sm" align="flex-end">
             <NumberInput
               label="Every"
@@ -160,7 +160,7 @@ export function TaskForm({
               onChange={(value) => {
                 const numValue = typeof value === 'number' ? value : undefined;
                 const currentFreq = form.getValues().expectedFrequency;
-                
+
                 if (numValue && numValue > 0) {
                   form.setFieldValue('expectedFrequency', {
                     value: numValue,
@@ -174,7 +174,7 @@ export function TaskForm({
               data-testid="frequency-value-input"
               aria-label="Frequency value"
             />
-            
+
             <Select
               label="Unit"
               data={FREQUENCY_UNITS}
@@ -229,7 +229,7 @@ export function TaskForm({
           >
             Cancel
           </Button>
-          
+
           <Button
             type="submit"
             loading={loading}

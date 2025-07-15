@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import {
-  ActionIcon,
-  Group,
-  TextInput,
-  SimpleGrid,
-  Text,
-  ScrollArea,
-  Tooltip,
-  Button,
-} from '@mantine/core';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import * as TablerIcons from '@tabler/icons-react';
+import {
+  ActionIcon,
+  Button,
+  Group,
+  ScrollArea,
+  SimpleGrid,
+  Text,
+  TextInput,
+  Tooltip,
+} from '@mantine/core';
 import { CATEGORY_ICONS } from '@/lib/constants/categories';
 
 interface CategoryIconSelectorProps {
@@ -85,12 +85,7 @@ export function CategoryIconSelector({
             }
 
             return (
-              <Tooltip
-                key={iconName}
-                label={iconName.replace(/-/g, ' ')}
-                position="top"
-                withArrow
-              >
+              <Tooltip key={iconName} label={iconName.replace(/-/g, ' ')} position="top" withArrow>
                 <ActionIcon
                   variant={isSelected ? 'filled' : 'subtle'}
                   size="lg"

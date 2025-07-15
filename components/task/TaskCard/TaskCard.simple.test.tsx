@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { MantineProvider } from '@mantine/core';
+import type { Category, Task } from '@/types';
 import { TaskCard } from './TaskCard';
-import type { Task, Category } from '@/types';
 
 // Mock task and category data
 const mockCategory: Category = {

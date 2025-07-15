@@ -1,28 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import {
-  Stack,
-  Group,
-  Text,
-  ActionIcon,
-  Card,
-  Button,
-  Loader,
-  Alert,
-  Badge,
-} from '@mantine/core';
-import {
-  IconEdit,
-  IconTrash,
-  IconPlus,
   IconAlertCircle,
+  IconEdit,
   IconGripVertical,
+  IconPlus,
+  IconTrash,
 } from '@tabler/icons-react';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { CategoryBadge } from '../CategoryBadge/CategoryBadge';
-import { CategoryForm } from '../CategoryForm/CategoryForm';
-import { CategoryDeleteModal } from '../CategoryDeleteModal/CategoryDeleteModal';
+import { ActionIcon, Alert, Badge, Button, Card, Group, Loader, Stack, Text } from '@mantine/core';
 import { categoryService } from '@/lib/services/CategoryService';
 import type { Category, CategoryWithTaskCount } from '@/types';
+import { CategoryBadge } from '../CategoryBadge/CategoryBadge';
+import { CategoryDeleteModal } from '../CategoryDeleteModal/CategoryDeleteModal';
+import { CategoryForm } from '../CategoryForm/CategoryForm';
 
 interface CategoryListProps {
   onCategoryChange?: () => void;
@@ -82,7 +72,9 @@ export function CategoryList({ onCategoryChange }: CategoryListProps) {
   };
 
   const handleDragEnd = async (result: any) => {
-    if (!result.destination) return;
+    if (!result.destination) {
+      return;
+    }
 
     const items = Array.from(categories);
     const [reorderedItem] = items.splice(result.source.index, 1);
@@ -93,7 +85,7 @@ export function CategoryList({ onCategoryChange }: CategoryListProps) {
 
     try {
       // Update order in database
-      const categoryIds = items.map(cat => cat.id);
+      const categoryIds = items.map((cat) => cat.id);
       await categoryService.reorderCategories(categoryIds);
       onCategoryChange?.();
     } catch (error) {
@@ -120,12 +112,7 @@ export function CategoryList({ onCategoryChange }: CategoryListProps) {
         variant="light"
       >
         {error}
-        <Button
-          variant="light"
-          size="xs"
-          mt="sm"
-          onClick={loadCategories}
-        >
+        <Button variant="light" size="xs" mt="sm" onClick={loadCategories}>
           Try Again
         </Button>
       </Alert>
@@ -138,10 +125,7 @@ export function CategoryList({ onCategoryChange }: CategoryListProps) {
         <Text size="lg" fw={600}>
           Categories
         </Text>
-        <Button
-          leftSection={<IconPlus size={16} />}
-          onClick={handleCreateCategory}
-        >
+        <Button leftSection={<IconPlus size={16} />} onClick={handleCreateCategory}>
           Add Category
         </Button>
       </Group>
@@ -149,17 +133,9 @@ export function CategoryList({ onCategoryChange }: CategoryListProps) {
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="categories">
           {(provided) => (
-            <Stack
-              gap="xs"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
+            <Stack gap="xs" {...provided.droppableProps} ref={provided.innerRef}>
               {categories.map((category, index) => (
-                <Draggable
-                  key={category.id}
-                  draggableId={category.id}
-                  index={index}
-                >
+                <Draggable key={category.id} draggableId={category.id} index={index}>
                   {(provided, snapshot) => (
                     <Card
                       ref={provided.innerRef}

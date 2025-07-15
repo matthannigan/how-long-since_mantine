@@ -1,14 +1,14 @@
+import type { ExpectedFrequency, Task } from '@/types';
 import {
-  formatTimeElapsed,
   calculateNextDueDate,
-  isTaskOverdue,
+  formatExpectedFrequency,
+  formatTimeElapsed,
+  getCompletionTimeDescription,
   getOverdueStatus,
   getTimeUntilDue,
-  formatExpectedFrequency,
+  isTaskOverdue,
   wasCompletedToday,
-  getCompletionTimeDescription,
 } from '../dateUtils';
-import type { Task, ExpectedFrequency } from '@/types';
 
 // Mock task for testing
 const createMockTask = (overrides: Partial<Task> = {}): Task => ({
@@ -131,9 +131,9 @@ describe('dateUtils', () => {
         lastCompletedAt: new Date('2024-01-10'),
         expectedFrequency: { value: 2, unit: 'day' },
       });
-      
+
       const status = getOverdueStatus(task, fixedDate);
-      
+
       expect(status.isOverdue).toBe(true);
       expect(status.nextDueDate).toEqual(new Date('2024-01-12T00:00:00.000Z'));
       expect(status.overdueBy).toContain('days');
@@ -145,9 +145,9 @@ describe('dateUtils', () => {
         lastCompletedAt: new Date('2024-01-14'),
         expectedFrequency: { value: 3, unit: 'day' },
       });
-      
+
       const status = getOverdueStatus(task, fixedDate);
-      
+
       expect(status.isOverdue).toBe(false);
       expect(status.nextDueDate).toEqual(new Date('2024-01-17T00:00:00.000Z'));
       expect(status.overdueBy).toBeNull();
@@ -160,7 +160,7 @@ describe('dateUtils', () => {
         lastCompletedAt: new Date('2024-01-14'),
         expectedFrequency: { value: 3, unit: 'day' },
       });
-      
+
       const result = getTimeUntilDue(task, fixedDate);
       expect(result).toContain('in 1 day');
     });
@@ -170,7 +170,7 @@ describe('dateUtils', () => {
         lastCompletedAt: new Date('2024-01-10'),
         expectedFrequency: { value: 2, unit: 'day' },
       });
-      
+
       const result = getTimeUntilDue(task, fixedDate);
       expect(result).toBeNull();
     });
@@ -179,7 +179,7 @@ describe('dateUtils', () => {
       const task = createMockTask({
         lastCompletedAt: new Date('2024-01-14'),
       });
-      
+
       const result = getTimeUntilDue(task, fixedDate);
       expect(result).toBeNull();
     });
@@ -207,7 +207,7 @@ describe('dateUtils', () => {
       const task = createMockTask({
         lastCompletedAt: new Date('2024-01-15T08:00:00Z'), // Same day as fixedDate
       });
-      
+
       expect(wasCompletedToday(task, fixedDate)).toBe(true);
     });
 
@@ -215,7 +215,7 @@ describe('dateUtils', () => {
       const task = createMockTask({
         lastCompletedAt: new Date('2024-01-14T20:00:00Z'), // Previous day
       });
-      
+
       expect(wasCompletedToday(task, fixedDate)).toBe(false);
     });
 
@@ -235,7 +235,7 @@ describe('dateUtils', () => {
       const task = createMockTask({
         lastCompletedAt: new Date('2024-01-15T11:30:00Z'), // 30 minutes ago
       });
-      
+
       expect(getCompletionTimeDescription(task)).toBe('Just completed');
     });
 
@@ -243,7 +243,7 @@ describe('dateUtils', () => {
       const task = createMockTask({
         lastCompletedAt: new Date('2024-01-15T08:00:00Z'), // 4 hours ago
       });
-      
+
       expect(getCompletionTimeDescription(task)).toBe('Completed today');
     });
 
@@ -251,7 +251,7 @@ describe('dateUtils', () => {
       const task = createMockTask({
         lastCompletedAt: new Date('2024-01-14T12:00:00Z'), // 24 hours ago
       });
-      
+
       expect(getCompletionTimeDescription(task)).toBe('Completed yesterday');
     });
 
@@ -259,7 +259,7 @@ describe('dateUtils', () => {
       const task = createMockTask({
         lastCompletedAt: new Date('2024-01-10T12:00:00Z'), // 5 days ago
       });
-      
+
       const result = getCompletionTimeDescription(task);
       expect(result).toContain('days ago');
     });

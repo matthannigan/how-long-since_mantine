@@ -38,7 +38,7 @@ export const parameters = {
 export const decorators = [
   (renderStory: any, context: any) => {
     const colorScheme = context.globals.colorScheme || 'light';
-    
+
     return (
       <MantineProvider theme={theme} forceColorScheme={colorScheme}>
         {renderStory()}

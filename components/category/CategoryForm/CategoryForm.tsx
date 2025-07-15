@@ -1,21 +1,13 @@
 import { useState } from 'react';
-import {
-  Button,
-  Group,
-  Modal,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { IconCheck, IconX } from '@tabler/icons-react';
+import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconX } from '@tabler/icons-react';
-import { CategoryColorPicker } from '../CategoryColorPicker/CategoryColorPicker';
-import { CategoryIconSelector } from '../CategoryIconSelector/CategoryIconSelector';
 import { categoryService } from '@/lib/services/CategoryService';
 import { validateCategoryFormData } from '@/lib/validation/schemas';
 import type { Category, CategoryFormData } from '@/types';
+import { CategoryColorPicker } from '../CategoryColorPicker/CategoryColorPicker';
+import { CategoryIconSelector } from '../CategoryIconSelector/CategoryIconSelector';
 
 interface CategoryFormProps {
   opened: boolean;
@@ -25,13 +17,7 @@ interface CategoryFormProps {
   mode: 'create' | 'edit';
 }
 
-export function CategoryForm({
-  opened,
-  onClose,
-  onSuccess,
-  category,
-  mode,
-}: CategoryFormProps) {
+export function CategoryForm({ opened, onClose, onSuccess, category, mode }: CategoryFormProps) {
   const [loading, setLoading] = useState(false);
 
   const form = useForm<CategoryFormData>({
@@ -59,7 +45,7 @@ export function CategoryForm({
     setLoading(true);
     try {
       let result: Category;
-      
+
       if (mode === 'create') {
         result = await categoryService.createCategory(values);
         notifications.show({
@@ -153,18 +139,10 @@ export function CategoryForm({
           </div>
 
           <Group justify="flex-end" mt="md">
-            <Button
-              variant="subtle"
-              onClick={handleClose}
-              disabled={loading}
-            >
+            <Button variant="subtle" onClick={handleClose} disabled={loading}>
               Cancel
             </Button>
-            <Button
-              type="submit"
-              loading={loading}
-              leftSection={<IconCheck size={16} />}
-            >
+            <Button type="submit" loading={loading} leftSection={<IconCheck size={16} />}>
               {mode === 'create' ? 'Create Category' : 'Save Changes'}
             </Button>
           </Group>

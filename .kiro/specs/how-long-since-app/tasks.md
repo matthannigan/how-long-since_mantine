@@ -74,8 +74,8 @@ The plan prioritizes core functionality first, then enhances with advanced featu
     - Write tests for category visual components
     - _Requirements: 3.4, 3.8, 8.1, 8.2_
 
-- [ ] 5. Task List Views and Navigation
-  - [ ] 5.1 Category View Implementation
+- [x] 5. Task List Views and Navigation
+  - [x] 5.1 Category View Implementation
     - Create TaskList component grouped by categories
     - Implement collapsible category sections
     - Add empty state handling for categories without tasks
@@ -83,7 +83,7 @@ The plan prioritizes core functionality first, then enhances with advanced featu
     - Write tests for category view functionality
     - _Requirements: 3.8, 3.9, 4.1, 4.2, 4.3, 8.5_
 
-  - [ ] 5.2 Time Commitment View Implementation
+  - [x] 5.2 Time Commitment View Implementation
     - Create time-based task grouping logic
     - Implement TaskList component with time commitment organization
     - Handle tasks without time commitment in separate section
@@ -91,7 +91,7 @@ The plan prioritizes core functionality first, then enhances with advanced featu
     - Write tests for time commitment view functionality
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-  - [ ] 5.3 View Switching and State Management
+  - [x] 5.3 View Switching and State Management
     - Implement view toggle component with clear active state indication
     - Create view preference persistence in user settings
     - Add smooth transitions between views with reduced motion support

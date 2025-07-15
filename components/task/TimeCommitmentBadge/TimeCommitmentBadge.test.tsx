@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { MantineProvider } from '@mantine/core';
-import { TimeCommitmentBadge } from './TimeCommitmentBadge';
 import type { TimeCommitment } from '@/types';
+import { TimeCommitmentBadge } from './TimeCommitmentBadge';
 
 // Test wrapper with MantineProvider
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -26,17 +26,17 @@ describe('TimeCommitmentBadge', () => {
 
     it('renders different time commitments correctly', () => {
       const commitments: TimeCommitment[] = ['15min', '30min', '1hr', '2hrs', '4hrs', '5hrs+'];
-      
+
       commitments.forEach((commitment) => {
         const { unmount } = render(
           <TestWrapper>
             <TimeCommitmentBadge commitment={commitment} />
           </TestWrapper>
         );
-        
+
         const badge = screen.getByTestId('time-commitment-badge');
         expect(badge).toBeInTheDocument();
-        
+
         unmount();
       });
     });
@@ -67,34 +67,39 @@ describe('TimeCommitmentBadge', () => {
 
     it('renders with different sizes', () => {
       const sizes: Array<'xs' | 'sm' | 'md' | 'lg' | 'xl'> = ['xs', 'sm', 'md', 'lg', 'xl'];
-      
+
       sizes.forEach((size) => {
         const { unmount } = render(
           <TestWrapper>
             <TimeCommitmentBadge commitment="1hr" size={size} />
           </TestWrapper>
         );
-        
+
         const badge = screen.getByTestId('time-commitment-badge');
         expect(badge).toBeInTheDocument();
-        
+
         unmount();
       });
     });
 
     it('renders with different variants', () => {
-      const variants: Array<'filled' | 'light' | 'outline' | 'dot'> = ['filled', 'light', 'outline', 'dot'];
-      
+      const variants: Array<'filled' | 'light' | 'outline' | 'dot'> = [
+        'filled',
+        'light',
+        'outline',
+        'dot',
+      ];
+
       variants.forEach((variant) => {
         const { unmount } = render(
           <TestWrapper>
             <TimeCommitmentBadge commitment="1hr" variant={variant} />
           </TestWrapper>
         );
-        
+
         const badge = screen.getByTestId('time-commitment-badge');
         expect(badge).toBeInTheDocument();
-        
+
         unmount();
       });
     });

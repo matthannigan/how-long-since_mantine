@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import type { Category, Task } from '@/types';
 import { TaskCard } from './TaskCard';
-import type { Task, Category } from '@/types';
 
 // Mock task and category data
 const mockCategory: Category = {
@@ -148,7 +148,7 @@ describe('TaskCard', () => {
       );
 
       expect(screen.getByTestId('completed-indicator')).toBeInTheDocument();
-      
+
       const title = screen.getByText('Clean the dishes');
       expect(title).toHaveStyle('text-decoration: line-through');
     });
@@ -165,7 +165,7 @@ describe('TaskCard', () => {
       );
 
       expect(screen.getByTestId('overdue-indicator')).toBeInTheDocument();
-      
+
       const timeElapsed = screen.getByTestId('time-elapsed');
       expect(timeElapsed).toHaveTextContent('overdue');
 
@@ -219,11 +219,7 @@ describe('TaskCard', () => {
     it('hides action buttons when handlers are not provided', () => {
       render(
         <TestWrapper>
-          <TaskCard
-            task={mockTask}
-            category={mockCategory}
-            onComplete={mockOnComplete}
-          />
+          <TaskCard task={mockTask} category={mockCategory} onComplete={mockOnComplete} />
         </TestWrapper>
       );
 

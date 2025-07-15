@@ -2,27 +2,27 @@
 
 import React from 'react';
 import {
+  IconAlertTriangle,
+  IconArchive,
+  IconCheck,
+  IconClock,
+  IconEdit,
+} from '@tabler/icons-react';
+import {
+  ActionIcon,
+  Badge,
+  Box,
   Card,
   Group,
   Stack,
   Text,
-  Badge,
-  ActionIcon,
-  Tooltip,
-  Box,
   ThemeIcon,
+  Tooltip,
 } from '@mantine/core';
-import {
-  IconAlertTriangle,
-  IconCheck,
-  IconEdit,
-  IconArchive,
-  IconClock,
-} from '@tabler/icons-react';
+import { formatTimeElapsed, getOverdueStatus } from '@/lib/utils/dateUtils';
+import type { Category, Task } from '@/types';
 import { TaskCompletionButton } from '../TaskCompletionButton/TaskCompletionButton';
 import { TimeCommitmentBadge } from '../TimeCommitmentBadge/TimeCommitmentBadge';
-import { formatTimeElapsed, getOverdueStatus } from '@/lib/utils/dateUtils';
-import type { Task, Category } from '@/types';
 
 interface TaskCardProps {
   /** Task data */
@@ -74,7 +74,7 @@ export function TaskCard({
   return (
     <Card
       shadow="sm"
-      padding={compact ? "sm" : "md"}
+      padding={compact ? 'sm' : 'md'}
       radius="md"
       withBorder
       style={cardStyles}
@@ -83,24 +83,24 @@ export function TaskCard({
       aria-labelledby={`task-title-${task.id}`}
       aria-describedby={`task-status-${task.id}`}
     >
-      <Stack gap={compact ? "xs" : "sm"}>
+      <Stack gap={compact ? 'xs' : 'sm'}>
         {/* Header with title and completion button */}
         <Group justify="space-between" align="flex-start" wrap="nowrap">
           <Box flex={1} style={{ minWidth: 0 }}>
             <Group gap="xs" align="center" wrap="nowrap">
               <Text
                 id={`task-title-${task.id}`}
-                size={compact ? "sm" : "md"}
+                size={compact ? 'sm' : 'md'}
                 fw={500}
                 lineClamp={2}
-                style={{ 
+                style={{
                   flex: 1,
-                  ...(isCompleted && { textDecoration: 'line-through', opacity: 0.7 })
+                  ...(isCompleted && { textDecoration: 'line-through', opacity: 0.7 }),
                 }}
               >
                 {task.name}
               </Text>
-              
+
               {/* Overdue indicator with multiple accessibility signals */}
               {overdueStatus.isOverdue && (
                 <Tooltip label="This task is overdue" position="top">
@@ -115,7 +115,7 @@ export function TaskCard({
                   </ThemeIcon>
                 </Tooltip>
               )}
-              
+
               {/* Completed indicator */}
               {isCompleted && (
                 <Tooltip label="Task completed" position="top">
@@ -131,7 +131,7 @@ export function TaskCard({
                 </Tooltip>
               )}
             </Group>
-            
+
             {/* Description */}
             {task.description && !compact && (
               <Text size="sm" c="dimmed" lineClamp={2} mt="xs">
@@ -145,7 +145,7 @@ export function TaskCard({
             task={task}
             onComplete={onComplete}
             onUndoComplete={onUndoComplete}
-            size={compact ? "sm" : "md"}
+            size={compact ? 'sm' : 'md'}
             loading={loading}
           />
         </Group>
@@ -155,23 +155,18 @@ export function TaskCard({
           <Group gap="sm" align="center" wrap="wrap">
             {/* Category badge */}
             {showCategory && (
-              <Badge
-                variant="dot"
-                color={category.color}
-                size="sm"
-                data-testid="category-badge"
-              >
+              <Badge variant="dot" color={category.color} size="sm" data-testid="category-badge">
                 {category.name}
               </Badge>
             )}
-            
+
             {/* Time elapsed */}
             <Group gap="xs" align="center">
               <IconClock size={14} style={{ opacity: 0.6 }} aria-hidden="true" />
               <Text
                 id={`task-status-${task.id}`}
                 size="sm"
-                c={overdueStatus.isOverdue ? "red" : "dimmed"}
+                c={overdueStatus.isOverdue ? 'red' : 'dimmed'}
                 fw={overdueStatus.isOverdue ? 500 : 400}
                 data-testid="time-elapsed"
               >
@@ -181,7 +176,7 @@ export function TaskCard({
                 )}
               </Text>
             </Group>
-            
+
             {/* Time commitment badge */}
             {task.timeCommitment && (
               <TimeCommitmentBadge
@@ -209,7 +204,7 @@ export function TaskCard({
                   </ActionIcon>
                 </Tooltip>
               )}
-              
+
               {onArchive && (
                 <Tooltip label="Archive task" position="top">
                   <ActionIcon
