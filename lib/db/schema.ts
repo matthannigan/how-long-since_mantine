@@ -40,6 +40,14 @@ export class HowLongSinceDB extends Dexie {
     });
 
     this.tasks.hook('updating', (_modifications, _primKey, obj, _trans) => {
+      // Convert string dates back to Date objects for validation
+      if (obj.createdAt && typeof obj.createdAt === 'string') {
+        obj.createdAt = new Date(obj.createdAt);
+      }
+      if (obj.lastCompletedAt && typeof obj.lastCompletedAt === 'string') {
+        obj.lastCompletedAt = new Date(obj.lastCompletedAt);
+      }
+
       // Validate data before updating
       const validation = validateTask(obj);
       if (!validation.success) {
