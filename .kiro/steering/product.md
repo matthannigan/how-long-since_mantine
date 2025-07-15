@@ -17,9 +17,9 @@ A household task management app that tracks when tasks were last completed rathe
 - Offline-first PWA functionality
 - Data import/export capabilities
 
-## Target Users
+## Example Target Users
 
-- **Busy Parents**: Managing work and household responsibilities
+- **Busy Parents**: Managing childcare and household responsibilities
 - **First-time Homeowners**: Learning home maintenance rhythms
 - **Active Retirees**: Tracking social connections and enrichment activities
 

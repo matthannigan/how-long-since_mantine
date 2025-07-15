@@ -3,7 +3,7 @@
 ## Overview
 "How Long Since" is a household and personal task management application focused on tracking *when* tasks were last completed rather than creating a to-do list. Unlike traditional task managers, this app answers the question "How long has it been since...?" for various responsibilities and activities. The app helps users identify suitable tasks based on available time and provides visual indicators for overdue tasks, all while maintaining high accessibility standards.
 
-## Target Users
+## Example Target Users
 "How Long Since" serves diverse users with different needs and life stages:
 
 1. **Busy Parents** (represented by Alex)
@@ -23,6 +23,8 @@
    - Maintaining variety in retirement lifestyle
    - Balancing household tasks with hobbies and learning
    - May have accessibility needs like larger text or higher contrast
+
+But remember these are research personas - not the only intended users of the app.
 
 ## Core User Story
 "As a busy person with various responsibilities, I want to be able to track how long it's been since I performed certain tasks and identify opportunities to complete tasks within limited available time so that more tasks get done and the list doesn't feel overwhelming."
