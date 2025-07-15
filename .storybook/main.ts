@@ -7,7 +7,7 @@ const config: StorybookConfig = {
     enableCrashReports: false,
   },
   stories: ['../components/**/*.(stories|story).@(js|jsx|ts|tsx)'],
-  addons: ['storybook-dark-mode'],
+  addons: [],
   framework: {
     name: '@storybook/nextjs',
     options: {},
