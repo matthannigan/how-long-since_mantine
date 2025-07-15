@@ -4,7 +4,7 @@
   "description": "Automatically runs ESLint and Stylelint to identify and correct linting errors whenever JavaScript, TypeScript, CSS, or related files are saved",
   "version": "1",
   "when": {
-    "type": "fileEdited",
+    "type": "userTriggered",
     "patterns": [
       "**/*.{js",
       "jsx",

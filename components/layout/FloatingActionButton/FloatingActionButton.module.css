@@ -1,0 +1,69 @@
+/* Floating Action Button Styles */
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  transition: all 200ms ease;
+  min-width: 48px;
+  min-height: 48px;
+}
+
+.fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 20%);
+}
+
+.fab:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+}
+
+.fab:focus-visible {
+  outline: 2px solid var(--mantine-color-primary-6);
+  outline-offset: 2px;
+}
+
+.fab:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .fab {
+    bottom: 96px; /* Account for bottom navigation */
+    right: 16px;
+    min-width: 56px;
+    min-height: 56px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .fab {
+    border: 2px solid var(--mantine-color-primary-6);
+  }
+  
+  .fab:focus-visible {
+    border-color: currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .fab {
+    transition: none;
+  }
+  
+  .fab:hover {
+    transform: none;
+  }
+  
+  .fab:active {
+    transform: none;
+  }
+}
