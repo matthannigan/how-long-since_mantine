@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MantineProvider } from '@mantine/core';
 import { Notifications, notifications } from '@mantine/notifications';
@@ -161,7 +161,7 @@ describe('TaskCompletionButton', () => {
       );
 
       const button = screen.getByTestId('task-completion-button');
-      
+
       await act(async () => {
         await user.click(button);
       });
@@ -170,7 +170,7 @@ describe('TaskCompletionButton', () => {
 
       // Wait a bit to ensure no undo button appears
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       });
 
       // Should not show undo button
@@ -191,7 +191,7 @@ describe('TaskCompletionButton', () => {
       );
 
       const button = screen.getByTestId('task-completion-button');
-      
+
       await act(async () => {
         await user.click(button);
       });
@@ -204,7 +204,7 @@ describe('TaskCompletionButton', () => {
       });
 
       const undoButton = screen.getByTestId('undo-button');
-      
+
       await act(async () => {
         await user.click(undoButton);
       });
@@ -250,7 +250,7 @@ describe('TaskCompletionButton', () => {
       );
 
       const button = screen.getByTestId('task-completion-button');
-      
+
       await act(async () => {
         await user.click(button);
       });
@@ -260,7 +260,7 @@ describe('TaskCompletionButton', () => {
       });
 
       const undoButton = screen.getByTestId('undo-button');
-      
+
       await act(async () => {
         await user.click(undoButton);
       });

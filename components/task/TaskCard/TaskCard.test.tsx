@@ -41,14 +41,6 @@ const overdueCompletedTask: Task = {
   expectedFrequency: { value: 1, unit: 'day' },
 };
 
-// For testing incomplete overdue task - never completed but has expected frequency
-const neverCompletedTask: Task = {
-  ...mockTask,
-  lastCompletedAt: null, // Never completed
-  expectedFrequency: { value: 1, unit: 'day' },
-  createdAt: new Date('2024-01-01'), // Created long ago
-};
-
 // Test wrapper with MantineProvider and Notifications
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   <MantineProvider>

@@ -1,6 +1,6 @@
 // Export/Import service for data backup and restore functionality
 import { db } from '@/lib/db';
-import { validateExportData, validateImportData } from '@/lib/validation/schemas';
+import { validateImportData } from '@/lib/validation/schemas';
 import type { ExportData, Task } from '@/types';
 import { categoryService } from './CategoryService';
 import { settingsService } from './SettingsService';
