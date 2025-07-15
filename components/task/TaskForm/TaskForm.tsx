@@ -13,7 +13,7 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { useForm, zodResolver } from '@mantine/form';
+import { useForm } from '@mantine/form';
 import { getTimeCommitmentOptions } from '@/lib/constants/timeCommitments';
 import { TaskFormDataSchema } from '@/lib/validation/schemas';
 import type { Category, FrequencyUnit, TaskFormData } from '@/types';
@@ -50,7 +50,19 @@ export function TaskForm({
 }: TaskFormProps) {
   const form = useForm<TaskFormData>({
     mode: 'uncontrolled',
-    validate: zodResolver(TaskFormDataSchema),
+    validate: (values) => {
+      const result = TaskFormDataSchema.safeParse(values);
+      if (!result.success) {
+        const errors: Record<string, string> = {};
+        result.error.issues.forEach((issue) => {
+          if (issue.path.length > 0) {
+            errors[issue.path[0] as string] = issue.message;
+          }
+        });
+        return errors;
+      }
+      return {};
+    },
     initialValues: {
       name: initialData?.name || '',
       description: initialData?.description || '',

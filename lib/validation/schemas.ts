@@ -12,13 +12,13 @@ export const ExpectedFrequencySchema = z.object({
 export const TimeCommitmentSchema = z.enum(['15min', '30min', '1hr', '2hrs', '4hrs', '5hrs+']);
 
 export const TaskSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z
     .string()
     .min(1, 'Task name is required')
     .max(128, 'Task name must be 128 characters or less'),
   description: z.string().max(512, 'Description must be 512 characters or less').default(''),
-  categoryId: z.string().uuid('Invalid category ID'),
+  categoryId: z.uuid('Invalid category ID'),
   createdAt: z.date(),
   lastCompletedAt: z.date().nullable(),
   expectedFrequency: ExpectedFrequencySchema.optional(),
@@ -33,7 +33,7 @@ export const TaskFormDataSchema = z.object({
     .min(1, 'Task name is required')
     .max(128, 'Task name must be 128 characters or less'),
   description: z.string().max(512, 'Description must be 512 characters or less').default(''),
-  categoryId: z.string().uuid('Please select a category'),
+  categoryId: z.uuid('Please select a category'),
   expectedFrequency: ExpectedFrequencySchema.optional(),
   timeCommitment: TimeCommitmentSchema.optional(),
   notes: z.string().max(512, 'Notes must be 512 characters or less').default(''),
@@ -41,7 +41,7 @@ export const TaskFormDataSchema = z.object({
 
 // Category validation schemas
 export const CategorySchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z
     .string()
     .min(1, 'Category name is required')
@@ -85,13 +85,63 @@ export const UserPreferencesSchema = z.object({
   backupReminders: z.boolean(),
 });
 
-// Export data validation schema
+// Date string transformation for import/export
+const DateStringSchema = z.string().transform((str, ctx) => {
+  const date = new Date(str);
+  if (isNaN(date.getTime())) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Invalid date string',
+    });
+    return z.NEVER;
+  }
+  return date;
+});
+
+// Import-specific schemas that handle date strings
+export const ImportTaskSchema = z.object({
+  id: z.uuid(),
+  name: z
+    .string()
+    .min(1, 'Task name is required')
+    .max(128, 'Task name must be 128 characters or less'),
+  description: z.string().max(512, 'Description must be 512 characters or less').default(''),
+  categoryId: z.uuid('Invalid category ID'),
+  createdAt: DateStringSchema,
+  lastCompletedAt: DateStringSchema.nullable(),
+  expectedFrequency: ExpectedFrequencySchema.optional(),
+  timeCommitment: TimeCommitmentSchema.optional(),
+  isArchived: z.boolean().default(false),
+  notes: z.string().max(512, 'Notes must be 512 characters or less').default(''),
+});
+
+export const ImportAppSettingsSchema = z.object({
+  id: z.string(),
+  lastBackupDate: DateStringSchema.nullable(),
+  currentView: ViewModeSchema.default('category'),
+  theme: ThemeSchema.default('system'),
+  textSize: TextSizeSchema.default('default'),
+  highContrast: z.boolean().default(false),
+  reducedMotion: z.boolean().default(false),
+  onboardingCompleted: z.boolean().default(false),
+});
+
+// Export data validation schema (for regular export with Date objects)
 export const ExportDataSchema = z.object({
   version: z.string(),
   exportDate: z.date(),
   tasks: z.array(TaskSchema),
   categories: z.array(CategorySchema),
   settings: AppSettingsSchema,
+});
+
+// Import data validation schema (for import with date strings)
+export const ImportDataSchema = z.object({
+  version: z.string(),
+  exportDate: DateStringSchema,
+  tasks: z.array(ImportTaskSchema),
+  categories: z.array(CategorySchema),
+  settings: ImportAppSettingsSchema,
 });
 
 // Validation helper functions
@@ -117,4 +167,8 @@ export function validateAppSettings(data: unknown) {
 
 export function validateExportData(data: unknown) {
   return ExportDataSchema.safeParse(data);
+}
+
+export function validateImportData(data: unknown) {
+  return ImportDataSchema.safeParse(data);
 }

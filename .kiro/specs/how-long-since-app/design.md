@@ -263,10 +263,10 @@ class HowLongSinceDB extends Dexie {
 ```typescript
 // Using Zod for runtime validation
 const TaskSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z.string().min(1).max(128),
   description: z.string().max(512),
-  categoryId: z.string().uuid(),
+  categoryId: z.uuid(),
   createdAt: z.date(),
   lastCompletedAt: z.date().nullable(),
   expectedFrequency: z.object({
@@ -279,7 +279,7 @@ const TaskSchema = z.object({
 });
 
 const CategorySchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z.string().min(1).max(50),
   color: z.string().regex(/^#[0-9A-F]{6}$/i),
   icon: z.string().optional(),

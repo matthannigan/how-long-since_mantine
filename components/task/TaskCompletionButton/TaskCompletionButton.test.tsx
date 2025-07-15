@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MantineProvider } from '@mantine/core';
-import { Notifications } from '@mantine/notifications';
+import { Notifications, notifications } from '@mantine/notifications';
 import type { Task } from '@/types';
 import { TaskCompletionButton } from './TaskCompletionButton';
 
@@ -37,6 +37,13 @@ describe('TaskCompletionButton', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Clear all notifications before each test
+    notifications.clean();
+  });
+
+  afterEach(() => {
+    // Clean up notifications after each test
+    notifications.clean();
   });
 
   describe('Icon Variant', () => {
@@ -154,14 +161,20 @@ describe('TaskCompletionButton', () => {
       );
 
       const button = screen.getByTestId('task-completion-button');
-      await user.click(button);
+      
+      await act(async () => {
+        await user.click(button);
+      });
 
       expect(mockOnComplete).toHaveBeenCalledWith('1');
 
-      // Should not show undo button
-      await waitFor(() => {
-        expect(screen.queryByTestId('undo-button')).not.toBeInTheDocument();
+      // Wait a bit to ensure no undo button appears
+      await act(async () => {
+        await new Promise(resolve => setTimeout(resolve, 100));
       });
+
+      // Should not show undo button
+      expect(screen.queryByTestId('undo-button')).not.toBeInTheDocument();
     });
 
     it('handles undo completion', async () => {
@@ -178,17 +191,23 @@ describe('TaskCompletionButton', () => {
       );
 
       const button = screen.getByTestId('task-completion-button');
-      await user.click(button);
+      
+      await act(async () => {
+        await user.click(button);
+      });
 
       expect(mockOnComplete).toHaveBeenCalledWith('1');
 
-      // Wait for undo button to appear
+      // Wait for undo button to appear in notification
       await waitFor(() => {
         expect(screen.getByTestId('undo-button')).toBeInTheDocument();
       });
 
       const undoButton = screen.getByTestId('undo-button');
-      await user.click(undoButton);
+      
+      await act(async () => {
+        await user.click(undoButton);
+      });
 
       expect(mockOnUndoComplete).toHaveBeenCalledWith('1');
     });
@@ -231,14 +250,20 @@ describe('TaskCompletionButton', () => {
       );
 
       const button = screen.getByTestId('task-completion-button');
-      await user.click(button);
+      
+      await act(async () => {
+        await user.click(button);
+      });
 
       await waitFor(() => {
         expect(screen.getByTestId('undo-button')).toBeInTheDocument();
       });
 
       const undoButton = screen.getByTestId('undo-button');
-      await user.click(undoButton);
+      
+      await act(async () => {
+        await user.click(undoButton);
+      });
 
       expect(mockOnUndoError).toHaveBeenCalledWith('1');
     });

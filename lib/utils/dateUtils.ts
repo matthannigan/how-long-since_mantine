@@ -9,6 +9,11 @@ export function formatTimeElapsed(date: Date | null): string {
     return 'Not done yet';
   }
 
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    return 'Unknown';
+  }
+
   try {
     return formatDistanceToNow(date, { addSuffix: true });
   } catch (error) {

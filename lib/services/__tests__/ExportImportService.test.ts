@@ -196,7 +196,9 @@ describe('ExportImportService', () => {
       });
       (db.transaction as jest.Mock).mockImplementation(mockTransaction);
 
-      (db.categories.get as jest.Mock).mockResolvedValue(null);
+      (db.categories.get as jest.Mock)
+        .mockResolvedValueOnce(null) // First call for category import check
+        .mockResolvedValueOnce(mockCategory); // Second call for task import check
       (db.categories.add as jest.Mock).mockResolvedValue('test-category-id');
       (db.tasks.get as jest.Mock).mockResolvedValue(null);
       (db.tasks.add as jest.Mock).mockResolvedValue('test-task-id');
@@ -255,9 +257,10 @@ describe('ExportImportService', () => {
 
       const result = await exportImportService.importFromJSON(jsonData);
 
-      expect(result.errors).toHaveLength(2);
+      expect(result.errors).toHaveLength(3);
       expect(result.errors[0]).toContain('Failed to import category');
-      expect(result.errors[1]).toContain('Failed to import settings');
+      expect(result.errors[1]).toContain('Task "Test Task" references non-existent category');
+      expect(result.errors[2]).toContain('Failed to import settings');
     });
 
     it('should throw error for invalid JSON', async () => {

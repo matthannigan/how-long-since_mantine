@@ -1,18 +1,9 @@
 'use client';
 
 import React from 'react';
-import {
-  Group,
-  Button,
-  Badge,
-  Stack,
-  Text,
-  Box,
-  Tooltip,
-  ActionIcon,
-} from '@mantine/core';
 import { IconClock, IconX } from '@tabler/icons-react';
-import { TIME_COMMITMENT_ORDER, getTimeCommitmentInfo } from '@/lib/constants/timeCommitments';
+import { ActionIcon, Badge, Box, Button, Group, Stack, Text, Tooltip } from '@mantine/core';
+import { getTimeCommitmentInfo, TIME_COMMITMENT_ORDER } from '@/lib/constants/timeCommitments';
 import type { TimeCommitment } from '@/types';
 
 interface TimeCommitmentFilterProps {
@@ -184,9 +175,7 @@ export function TimeCommitmentFilter({
         {hasSelections
           ? `Filtering by ${selectedCommitments.length} time commitment${
               selectedCommitments.length === 1 ? '' : 's'
-            }: ${selectedCommitments
-              .map((c) => getTimeCommitmentInfo(c).label)
-              .join(', ')}`
+            }: ${selectedCommitments.map((c) => getTimeCommitmentInfo(c).label).join(', ')}`
           : 'No time commitment filters active'}
       </div>
     </Stack>

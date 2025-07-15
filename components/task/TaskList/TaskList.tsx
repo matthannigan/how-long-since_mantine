@@ -106,7 +106,9 @@ function TaskGroup({
   }, [categories]);
 
   const overdueTasks = tasks.filter((task) => {
-    if (!task.expectedFrequency || !task.lastCompletedAt) {return false;}
+    if (!task.expectedFrequency || !task.lastCompletedAt) {
+      return false;
+    }
 
     const { value, unit } = task.expectedFrequency;
     const lastCompleted = new Date(task.lastCompletedAt);
@@ -293,52 +295,51 @@ export function TaskList({
           icon: <IconCategory size={16} />,
         };
       });
-    } 
-      // Group by time commitment
-      const timeGroups = new Map<string, Task[]>();
+    }
+    // Group by time commitment
+    const timeGroups = new Map<string, Task[]>();
 
-      // Initialize all time commitment groups
-      TIME_COMMITMENT_ORDER.forEach((commitment) => {
-        timeGroups.set(commitment, []);
+    // Initialize all time commitment groups
+    TIME_COMMITMENT_ORDER.forEach((commitment) => {
+      timeGroups.set(commitment, []);
+    });
+    timeGroups.set('unknown', []);
+
+    // Distribute tasks into time commitment groups
+    filteredTasks.forEach((task) => {
+      const commitment = task.timeCommitment || 'unknown';
+      const groupTasks = timeGroups.get(commitment) || [];
+      groupTasks.push(task);
+      timeGroups.set(commitment, groupTasks);
+    });
+
+    // Sort tasks within each group
+    if (taskSort) {
+      timeGroups.forEach((tasks, commitment) => {
+        timeGroups.set(commitment, tasks.sort(taskSort));
       });
-      timeGroups.set('unknown', []);
+    }
 
-      // Distribute tasks into time commitment groups
-      filteredTasks.forEach((task) => {
-        const commitment = task.timeCommitment || 'unknown';
-        const groupTasks = timeGroups.get(commitment) || [];
-        groupTasks.push(task);
-        timeGroups.set(commitment, groupTasks);
-      });
-
-      // Sort tasks within each group
-      if (taskSort) {
-        timeGroups.forEach((tasks, commitment) => {
-          timeGroups.set(commitment, tasks.sort(taskSort));
-        });
-      }
-
-      return Array.from(timeGroups.entries()).map(([commitment, tasks]) => {
-        if (commitment === 'unknown') {
-          return {
-            id: 'unknown',
-            title: 'Time Unknown',
-            tasks,
-            color: 'var(--mantine-color-gray-6)',
-            icon: <IconClock size={16} />,
-          };
-        }
-
-        const info = getTimeCommitmentInfo(commitment as TimeCommitment);
+    return Array.from(timeGroups.entries()).map(([commitment, tasks]) => {
+      if (commitment === 'unknown') {
         return {
-          id: commitment,
-          title: info.label,
+          id: 'unknown',
+          title: 'Time Unknown',
           tasks,
-          color: 'var(--mantine-color-blue-6)',
+          color: 'var(--mantine-color-gray-6)',
           icon: <IconClock size={16} />,
         };
-      });
-    
+      }
+
+      const info = getTimeCommitmentInfo(commitment as TimeCommitment);
+      return {
+        id: commitment,
+        title: info.label,
+        tasks,
+        color: 'var(--mantine-color-blue-6)',
+        icon: <IconClock size={16} />,
+      };
+    });
   }, [filteredTasks, categories, viewMode, taskSort]);
 
   // Loading state

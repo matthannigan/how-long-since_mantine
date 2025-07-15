@@ -12,7 +12,7 @@ export class TaskService {
       if (includeArchived) {
         return await db.tasks.orderBy('createdAt').reverse().toArray();
       }
-      return await db.tasks.where('isArchived').equals(false).reverse().sortBy('createdAt');
+      return await db.tasks.where('isArchived').equals(0).reverse().sortBy('createdAt');
     } catch (error) {
       throw new Error(`Failed to fetch tasks: ${error}`);
     }

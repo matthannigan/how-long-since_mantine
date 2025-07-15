@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MantineProvider } from '@mantine/core';
-import { TimeCommitmentFilter, TimeCommitmentPresets } from './TimeCommitmentFilter';
 import type { TimeCommitment } from '@/types';
+import { TimeCommitmentFilter, TimeCommitmentPresets } from './TimeCommitmentFilter';
 
 // Test wrapper with Mantine provider
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -64,10 +64,7 @@ describe('TimeCommitmentFilter Component', () => {
     it('shows selected commitments as filled buttons', () => {
       render(
         <TestWrapper>
-          <TimeCommitmentFilter
-            {...defaultProps}
-            selectedCommitments={['15min', '1hr']}
-          />
+          <TimeCommitmentFilter {...defaultProps} selectedCommitments={['15min', '1hr']} />
         </TestWrapper>
       );
 
@@ -95,11 +92,7 @@ describe('TimeCommitmentFilter Component', () => {
     it('displays task counts when showCounts is true', () => {
       render(
         <TestWrapper>
-          <TimeCommitmentFilter
-            {...defaultProps}
-            showCounts
-            commitmentCounts={commitmentCounts}
-          />
+          <TimeCommitmentFilter {...defaultProps} showCounts commitmentCounts={commitmentCounts} />
         </TestWrapper>
       );
 
@@ -112,11 +105,7 @@ describe('TimeCommitmentFilter Component', () => {
     it('shows unknown time commitment filter when there are unknown tasks', () => {
       render(
         <TestWrapper>
-          <TimeCommitmentFilter
-            {...defaultProps}
-            showCounts
-            commitmentCounts={commitmentCounts}
-          />
+          <TimeCommitmentFilter {...defaultProps} showCounts commitmentCounts={commitmentCounts} />
         </TestWrapper>
       );
 
@@ -146,10 +135,7 @@ describe('TimeCommitmentFilter Component', () => {
     it('shows clear all button when filters are active', () => {
       render(
         <TestWrapper>
-          <TimeCommitmentFilter
-            {...defaultProps}
-            selectedCommitments={['15min', '1hr']}
-          />
+          <TimeCommitmentFilter {...defaultProps} selectedCommitments={['15min', '1hr']} />
         </TestWrapper>
       );
 
@@ -188,10 +174,7 @@ describe('TimeCommitmentFilter Component', () => {
     it('displays active filters section when filters are selected', () => {
       render(
         <TestWrapper>
-          <TimeCommitmentFilter
-            {...defaultProps}
-            selectedCommitments={['15min', '2hrs']}
-          />
+          <TimeCommitmentFilter {...defaultProps} selectedCommitments={['15min', '2hrs']} />
         </TestWrapper>
       );
 
@@ -213,10 +196,10 @@ describe('TimeCommitmentFilter Component', () => {
 
       // Find the remove button in the active filters section (the small X button)
       const removeButtons = screen.getAllByLabelText('Remove 15 minutes filter');
-      const badgeRemoveButton = removeButtons.find(button => 
-        button.getAttribute('data-size') === 'xs'
+      const badgeRemoveButton = removeButtons.find(
+        (button) => button.getAttribute('data-size') === 'xs'
       );
-      
+
       expect(badgeRemoveButton).toBeDefined();
       fireEvent.click(badgeRemoveButton!);
 
@@ -239,10 +222,7 @@ describe('TimeCommitmentFilter Component', () => {
     it('updates ARIA labels based on selection state', () => {
       render(
         <TestWrapper>
-          <TimeCommitmentFilter
-            {...defaultProps}
-            selectedCommitments={['15min']}
-          />
+          <TimeCommitmentFilter {...defaultProps} selectedCommitments={['15min']} />
         </TestWrapper>
       );
 
@@ -264,11 +244,7 @@ describe('TimeCommitmentFilter Component', () => {
 
       render(
         <TestWrapper>
-          <TimeCommitmentFilter
-            {...defaultProps}
-            showCounts
-            commitmentCounts={commitmentCounts}
-          />
+          <TimeCommitmentFilter {...defaultProps} showCounts commitmentCounts={commitmentCounts} />
         </TestWrapper>
       );
 
@@ -278,10 +254,7 @@ describe('TimeCommitmentFilter Component', () => {
     it('announces filter changes to screen readers', () => {
       render(
         <TestWrapper>
-          <TimeCommitmentFilter
-            {...defaultProps}
-            selectedCommitments={['15min', '1hr']}
-          />
+          <TimeCommitmentFilter {...defaultProps} selectedCommitments={['15min', '1hr']} />
         </TestWrapper>
       );
 
@@ -360,10 +333,7 @@ describe('TimeCommitmentPresets Component', () => {
   it('shows active preset as filled button', () => {
     render(
       <TestWrapper>
-        <TimeCommitmentPresets
-          {...defaultProps}
-          selectedCommitments={['15min', '30min']}
-        />
+        <TimeCommitmentPresets {...defaultProps} selectedCommitments={['15min', '30min']} />
       </TestWrapper>
     );
 

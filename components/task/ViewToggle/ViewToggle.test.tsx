@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MantineProvider } from '@mantine/core';
-import { ViewToggle, ViewToggleWithStats, useViewToggle } from './ViewToggle';
 import type { TaskListViewMode } from '../TaskList/TaskList';
+import { useViewToggle, ViewToggle, ViewToggleWithStats } from './ViewToggle';
 
 // Test wrapper with Mantine provider
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -223,10 +223,10 @@ describe('ViewToggle Component', () => {
       );
 
       const categoryButton = screen.getByTestId('view-toggle-category');
-      
+
       // Hover to show tooltip
       fireEvent.mouseEnter(categoryButton);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Switch to categories view/)).toBeInTheDocument();
       });
@@ -302,10 +302,7 @@ describe('ViewToggleWithStats Component', () => {
   it('works without statistics', () => {
     render(
       <TestWrapper>
-        <ViewToggleWithStats
-          currentView="category"
-          onViewChange={jest.fn()}
-        />
+        <ViewToggleWithStats currentView="category" onViewChange={jest.fn()} />
       </TestWrapper>
     );
 
@@ -316,9 +313,9 @@ describe('ViewToggleWithStats Component', () => {
 
 describe('useViewToggle Hook', () => {
   // Test component to use the hook
-  function TestComponent({ 
+  function TestComponent({
     initialView = 'category' as TaskListViewMode,
-    storageKey = 'test-view'
+    storageKey = 'test-view',
   }) {
     const { currentView, isLoading, handleViewChange } = useViewToggle(initialView, storageKey);
 
@@ -326,8 +323,12 @@ describe('useViewToggle Hook', () => {
       <div>
         <span data-testid="current-view">{currentView}</span>
         <span data-testid="is-loading">{isLoading.toString()}</span>
-        <button type="button" onClick={() => handleViewChange('time')}>Switch to Time</button>
-        <button type="button" onClick={() => handleViewChange('category')}>Switch to Category</button>
+        <button type="button" onClick={() => handleViewChange('time')}>
+          Switch to Time
+        </button>
+        <button type="button" onClick={() => handleViewChange('category')}>
+          Switch to Category
+        </button>
       </div>
     );
   }

@@ -1,16 +1,8 @@
 'use client';
 
 import React from 'react';
-import {
-  SegmentedControl,
-  Group,
-  Text,
-  ActionIcon,
-  Tooltip,
-  Box,
-  Transition,
-} from '@mantine/core';
 import { IconCategory, IconClock } from '@tabler/icons-react';
+import { ActionIcon, Box, Group, SegmentedControl, Text, Tooltip, Transition } from '@mantine/core';
 import type { TaskListViewMode } from '../TaskList/TaskList';
 
 interface ViewToggleProps {
@@ -88,10 +80,10 @@ export function ViewToggle({
         {loading && (
           <Box
             style={{
-            opacity: 0.6,
-            fontSize: '12px',
-            color: 'var(--mantine-color-dimmed)',
-          }}
+              opacity: 0.6,
+              fontSize: '12px',
+              color: 'var(--mantine-color-dimmed)',
+            }}
           >
             Switching...
           </Box>
@@ -133,12 +125,7 @@ export function ViewToggle({
       />
 
       {/* Loading overlay */}
-      <Transition
-        mounted={loading}
-        transition="fade"
-        duration={200}
-        timingFunction="ease"
-      >
+      <Transition mounted={loading} transition="fade" duration={200} timingFunction="ease">
         {(styles) => (
           <Box
             style={{
@@ -175,10 +162,7 @@ interface ViewToggleWithStatsProps extends ViewToggleProps {
   };
 }
 
-export function ViewToggleWithStats({
-  viewStats,
-  ...props
-}: ViewToggleWithStatsProps) {
+export function ViewToggleWithStats({ viewStats, ...props }: ViewToggleWithStatsProps) {
   const { currentView } = props;
 
   return (
@@ -191,13 +175,13 @@ export function ViewToggleWithStats({
           <Text size="xs" c="dimmed">
             {currentView === 'category' ? (
               <>
-                {viewStats.category.categoriesWithTasks} of{' '}
-                {viewStats.category.totalCategories} categories have tasks
+                {viewStats.category.categoriesWithTasks} of {viewStats.category.totalCategories}{' '}
+                categories have tasks
               </>
             ) : (
               <>
-                {viewStats.time.commitmentsWithTasks} of{' '}
-                {viewStats.time.totalCommitments} time slots have tasks
+                {viewStats.time.commitmentsWithTasks} of {viewStats.time.totalCommitments} time
+                slots have tasks
               </>
             )}
           </Text>

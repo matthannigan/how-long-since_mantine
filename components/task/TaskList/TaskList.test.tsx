@@ -443,10 +443,10 @@ describe('TaskList Component', () => {
 
       // Check group headers have proper ARIA attributes - filter out task completion buttons
       const allButtons = screen.getAllByRole('button');
-      const groupHeaders = allButtons.filter((button) => 
-        button.hasAttribute('aria-expanded') && button.hasAttribute('aria-controls')
+      const groupHeaders = allButtons.filter(
+        (button) => button.hasAttribute('aria-expanded') && button.hasAttribute('aria-controls')
       );
-      
+
       expect(groupHeaders.length).toBeGreaterThan(0);
       groupHeaders.forEach((header) => {
         expect(header).toHaveAttribute('aria-expanded');
@@ -463,10 +463,10 @@ describe('TaskList Component', () => {
 
       // Group headers should be focusable - filter out task completion buttons
       const allButtons = screen.getAllByRole('button');
-      const groupHeaders = allButtons.filter((button) => 
-        button.hasAttribute('aria-expanded') && button.hasAttribute('aria-controls')
+      const groupHeaders = allButtons.filter(
+        (button) => button.hasAttribute('aria-expanded') && button.hasAttribute('aria-controls')
       );
-      
+
       groupHeaders.forEach((header) => {
         expect(header).toHaveAttribute('tabIndex', '0');
       });

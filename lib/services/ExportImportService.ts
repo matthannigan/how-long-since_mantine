@@ -1,6 +1,6 @@
 // Export/Import service for data backup and restore functionality
 import { db } from '@/lib/db';
-import { validateExportData } from '@/lib/validation/schemas';
+import { validateExportData, validateImportData } from '@/lib/validation/schemas';
 import type { ExportData, Task } from '@/types';
 import { categoryService } from './CategoryService';
 import { settingsService } from './SettingsService';
@@ -89,13 +89,13 @@ export class ExportImportService {
         throw new Error('Invalid JSON format');
       }
 
-      // Validate export data structure
-      const validation = validateExportData(parsedData);
+      // Validate import data structure (handles date string conversion)
+      const validation = validateImportData(parsedData);
       if (!validation.success) {
-        throw new Error(`Invalid export data format: ${validation.error.message}`);
+        throw new Error(`Invalid export data format: ${JSON.stringify(validation.error.issues)}`);
       }
 
-      const exportData = validation.data as ExportData;
+      const exportData = validation.data;
       const errors: string[] = [];
       let tasksImported = 0;
       let categoriesImported = 0;

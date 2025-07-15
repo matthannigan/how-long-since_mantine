@@ -4,7 +4,6 @@ import { Button, Group, Modal, Stack, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { categoryService } from '@/lib/services/CategoryService';
-import { validateCategoryFormData } from '@/lib/validation/schemas';
 import type { Category, CategoryFormData } from '@/types';
 import { CategoryColorPicker } from '../CategoryColorPicker/CategoryColorPicker';
 import { CategoryIconSelector } from '../CategoryIconSelector/CategoryIconSelector';
@@ -26,22 +25,26 @@ export function CategoryForm({ opened, onClose, onSuccess, category, mode }: Cat
       color: category?.color || '#3B82F6',
       icon: category?.icon || undefined,
     },
-    validate: (values) => {
-      const result = validateCategoryFormData(values);
-      if (!result.success) {
-        const errors: Record<string, string> = {};
-        result.error.errors.forEach((error) => {
-          if (error.path.length > 0) {
-            errors[error.path[0] as string] = error.message;
-          }
-        });
-        return errors;
-      }
-      return {};
+    validate: {
+      name: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'Category name is required';
+        }
+        if (value.length > 50) {
+          return 'Category name must be 50 characters or less';
+        }
+        return null;
+      },
     },
   });
 
   const handleSubmit = async (values: CategoryFormData) => {
+    // Validate the form before proceeding
+    const validation = form.validate();
+    if (validation.hasErrors) {
+      return;
+    }
+
     setLoading(true);
     try {
       let result: Category;
@@ -105,7 +108,6 @@ export function CategoryForm({ opened, onClose, onSuccess, category, mode }: Cat
             label="Category Name"
             placeholder="Enter category name"
             required
-            maxLength={50}
             {...form.getInputProps('name')}
             disabled={loading}
             data-autofocus
@@ -142,7 +144,18 @@ export function CategoryForm({ opened, onClose, onSuccess, category, mode }: Cat
             <Button variant="subtle" onClick={handleClose} disabled={loading}>
               Cancel
             </Button>
-            <Button type="submit" loading={loading} leftSection={<IconCheck size={16} />}>
+            <Button
+              type="submit"
+              loading={loading}
+              leftSection={<IconCheck size={16} />}
+              onClick={(e) => {
+                e.preventDefault();
+                const validation = form.validate();
+                if (!validation.hasErrors) {
+                  handleSubmit(form.values);
+                }
+              }}
+            >
               {mode === 'create' ? 'Create Category' : 'Save Changes'}
             </Button>
           </Group>

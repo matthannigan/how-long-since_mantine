@@ -73,7 +73,7 @@ describe('TaskService', () => {
       const result = await taskService.getAllTasks();
 
       expect(db.tasks.where).toHaveBeenCalledWith('isArchived');
-      expect(mockWhere.equals).toHaveBeenCalledWith(false);
+      expect(mockWhere.equals).toHaveBeenCalledWith(0);
       expect(result).toEqual(mockTasks);
     });
 

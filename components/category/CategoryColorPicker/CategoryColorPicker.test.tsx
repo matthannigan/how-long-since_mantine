@@ -46,9 +46,7 @@ describe('CategoryColorPicker', () => {
   });
 
   it('disables all buttons when disabled prop is true', () => {
-    renderWithProviders(
-      <CategoryColorPicker value="#3B82F6" onChange={mockOnChange} disabled />
-    );
+    renderWithProviders(<CategoryColorPicker value="#3B82F6" onChange={mockOnChange} disabled />);
 
     const colorButtons = screen.getAllByRole('button');
     colorButtons.forEach((button) => {
@@ -59,9 +57,7 @@ describe('CategoryColorPicker', () => {
   it('does not call onChange when disabled', async () => {
     const user = userEvent.setup();
 
-    renderWithProviders(
-      <CategoryColorPicker value="#3B82F6" onChange={mockOnChange} disabled />
-    );
+    renderWithProviders(<CategoryColorPicker value="#3B82F6" onChange={mockOnChange} disabled />);
 
     const colorButton = screen.getByLabelText('Select color #EF4444');
     await user.click(colorButton);

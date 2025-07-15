@@ -44,7 +44,18 @@ describe('Project Foundation Setup', () => {
       pastDate.setDate(pastDate.getDate() - 10); // 10 days ago
 
       const frequency = { value: 7, unit: 'day' as const };
-      const isOverdue = isTaskOverdue(pastDate, frequency);
+      const mockTask = {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        name: 'Test Task',
+        description: 'Test description',
+        categoryId: '123e4567-e89b-12d3-a456-426614174001',
+        createdAt: new Date(),
+        lastCompletedAt: pastDate,
+        isArchived: false,
+        notes: '',
+        expectedFrequency: frequency,
+      };
+      const isOverdue = isTaskOverdue(mockTask);
 
       expect(isOverdue).toBe(true);
     });

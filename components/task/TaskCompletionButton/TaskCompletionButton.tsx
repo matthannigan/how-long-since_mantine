@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { IconCheck, IconUndo } from '@tabler/icons-react';
+import { IconCheck, IconRotateClockwise } from '@tabler/icons-react';
 import { ActionIcon, Button, Group, Text, Tooltip } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import type { Task } from '@/types';
@@ -61,7 +61,7 @@ export function TaskCompletionButton({
               <Button
                 size="xs"
                 variant="subtle"
-                leftSection={<IconUndo size={14} />}
+                leftSection={<IconRotateClockwise size={14} />}
                 onClick={handleUndo}
                 data-testid="undo-button"
               >
